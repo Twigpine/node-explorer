@@ -1,6 +1,7 @@
 import { Button } from '../register/controls';
 import { CopyButton } from '../ui/CopyButton';
 import { Section } from '../register/primitives';
+import { isHttpUrl } from '../../lib/api';
 
 interface ClonePanelProps {
   /** The node's https clone URL — plain git handles this one. */
@@ -25,12 +26,12 @@ export function ClonePanel({ cloneUrl, remoteUrl, onNavigate }: ClonePanelProps)
         git clone {remoteUrl ? `"${primary}"` : primary}
       </pre>
 
-      {remoteUrl && (
+      {remoteUrl && isHttpUrl(cloneUrl) && (
         <p className="m-0 mt-2.5 text-[12.5px] leading-relaxed text-subtle">
           The <code className="font-mono">gitlawb://</code> scheme requires the{' '}
           <code className="font-mono">git-remote-gitlawb</code> helper. Plain{' '}
           <code className="font-mono">git</code> can clone the same repository over{' '}
-          <a href={cloneUrl} target="_blank" rel="noopener" className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current">
+          <a href={cloneUrl} target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current">
             https
           </a>
           .
