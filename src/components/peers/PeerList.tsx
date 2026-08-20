@@ -83,7 +83,7 @@ function PeerRow({ peer, index }: { peer: ApiPeer; index: number }) {
           </a>
         ) : (
           <span className="md:hidden font-mono text-[12px] text-subtle truncate" title="Rejected URL scheme">
-            {peerHost(peer.http_url)}
+            {peer.http_url}
           </span>
         )}
       </div>
@@ -100,7 +100,7 @@ function PeerRow({ peer, index }: { peer: ApiPeer; index: number }) {
         </a>
       ) : (
         <span className="hidden md:block font-mono text-[12.5px] text-muted truncate" title="Rejected URL scheme">
-          {peerHost(peer.http_url)}
+          {peer.http_url}
         </span>
       )}
 
