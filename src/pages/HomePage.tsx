@@ -355,7 +355,7 @@ export default function HomePage() {
                     <a
                       href={cloneRepo.clone_url}
                       target="_blank"
-                      rel="noopener"
+                      rel="noopener noreferrer"
                       className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current"
                     >
                       https

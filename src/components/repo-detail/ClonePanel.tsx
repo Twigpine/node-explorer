@@ -26,14 +26,26 @@ export function ClonePanel({ cloneUrl, remoteUrl, onNavigate }: ClonePanelProps)
         git clone {remoteUrl ? `"${primary}"` : primary}
       </pre>
 
-      {remoteUrl && isHttpUrl(cloneUrl) && (
+      {remoteUrl && (
         <p className="m-0 mt-2.5 text-[12.5px] leading-relaxed text-subtle">
           The <code className="font-mono">gitlawb://</code> scheme requires the{' '}
           <code className="font-mono">git-remote-gitlawb</code> helper. Plain{' '}
-          <code className="font-mono">git</code> can clone the same repository over{' '}
-          <a href={cloneUrl} target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current">
-            https
-          </a>
+          <code className="font-mono">git</code> can clone the same repository
+          {/* clone_url comes from the node, not this app: it only becomes a
+              link when it is plain http(s). The sentence stands either way. */}
+          {isHttpUrl(cloneUrl) && (
+            <>
+              {' '}over{' '}
+              <a
+                href={cloneUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current"
+              >
+                https
+              </a>
+            </>
+          )}
           .
         </p>
       )}
