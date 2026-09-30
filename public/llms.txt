@@ -19,6 +19,6 @@ This site (explorer.gitlawb.com) is the live network explorer and documentation 
 
 ## Tools
 
-- [Install script](https://gitlawb.com/install.sh): installs gl + git-remote-gitlawb (macOS/Linux)
+- [Install script](https://twigpine.com/install.sh): installs gl + git-remote-gitlawb (macOS/Linux)
 - [npm package](https://www.npmjs.com/package/@gitlawb/gl): @gitlawb/gl
 - [Source](https://github.com/Twigpine/node): reference node + CLI implementation (Rust)

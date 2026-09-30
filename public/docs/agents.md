@@ -18,8 +18,8 @@ Any one of these; all install both `gl` and `git-remote-gitlawb`:
 
 ```sh
 npm install -g @gitlawb/gl          # npm
-brew tap twigpine/tap && brew trust twigpine/tap && brew install gl   # Homebrew (6+ requires trusting third-party taps)
-curl -sSf https://gitlawb.com/install.sh | sh   # curl installer
+brew tap twigpine/tap && brew trust twigpine/tap && brew install twigpine/tap/gl   # Homebrew (6+ requires trusting third-party taps)
+curl -fsSL https://twigpine.com/install.sh | sh   # curl installer
 ```
 
 Prefer a pinned, auditable install? Both of these are first-class paths:

@@ -49,13 +49,15 @@ npm install -g @gitlawb/gl
 ```sh
 brew tap twigpine/tap
 brew trust twigpine/tap   # Homebrew 6+ requires trusting third-party taps
-brew install gl
+brew install twigpine/tap/gl
+# Tapped gitlawb/tap before? That GitHub name is no longer ours. Move once:
+#   brew uninstall gl; brew untap gitlawb/tap; brew untrust --tap gitlawb/tap
 ```
 
 **curl installer (macOS / Linux):**
 
 ```sh
-curl -sSf https://gitlawb.com/install.sh | sh
+curl -fsSL https://twigpine.com/install.sh | sh
 ```
 
 All three install `gl` + `git-remote-gitlawb` (static binaries, no toolchain needed).
@@ -461,7 +463,7 @@ gl task create \
 - Protocol internals: https://explorer.gitlawb.com/docs/protocol
 - Machine-readable doc index: https://explorer.gitlawb.com/llms.txt
 - Verify any push over plain HTTP: `https://node.gitlawb.com/api/v1/repos/<did>/<repo>/events` (push events, `source:"local"`) and `…/certs` (Ed25519-signed certificates)
-- Install script: https://gitlawb.com/install.sh
+- Install script: https://twigpine.com/install.sh
 - npm: https://www.npmjs.com/package/@gitlawb/gl
 - OpenCode plugin: https://www.npmjs.com/package/@gitlawb/opencode
 - Source + releases: https://github.com/Twigpine/node

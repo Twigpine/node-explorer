@@ -13,7 +13,7 @@ Running a node requires no token. Write-node access lock is not live on Base yet
 ## 1. Install the CLI
 
 ```sh
-curl -fsSL https://gitlawb.com/install.sh | sh
+curl -fsSL https://twigpine.com/install.sh | sh
 # or build from source:
 cargo install --path crates/gl
 ```

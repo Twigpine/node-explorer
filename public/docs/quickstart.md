@@ -11,10 +11,10 @@ Pick one:
 npm install -g @gitlawb/gl
 
 # Homebrew (macOS / Linux) — brew 6+ requires trusting third-party taps
-brew tap twigpine/tap && brew trust twigpine/tap && brew install gl
+brew tap twigpine/tap && brew trust twigpine/tap && brew install twigpine/tap/gl
 
 # curl installer (macOS / Linux)
-curl -sSf https://gitlawb.com/install.sh | sh
+curl -fsSL https://twigpine.com/install.sh | sh
 ```
 
 Each installs two binaries: `gl` (the CLI) and `git-remote-gitlawb` (the helper that teaches plain `git` to speak `gitlawb://`).
