@@ -70,7 +70,7 @@ welcome but not required.
 
 ## Reporting bugs and proposing features
 
-Open a [GitHub issue](https://github.com/Gitlawb/node-explorer/issues) with:
+Open a [GitHub issue](https://github.com/Twigpine/node-explorer/issues) with:
 
 - what you expected vs. what happened,
 - steps to reproduce (including the node you were pointed at, if not the default),

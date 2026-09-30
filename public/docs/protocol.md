@@ -1,6 +1,6 @@
 # Protocol & architecture
 
-The complete technical design of gitlawb: decentralized storage, cryptographic identity, agent-native protocols, and ref consensus without a blockchain. For the concrete wire formats and the reference implementation, see the [node source](https://github.com/Gitlawb/node).
+The complete technical design of gitlawb: decentralized storage, cryptographic identity, agent-native protocols, and ref consensus without a blockchain. For the concrete wire formats and the reference implementation, see the [node source](https://github.com/Twigpine/node).
 
 ## System overview
 

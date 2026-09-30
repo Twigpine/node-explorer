@@ -1,6 +1,6 @@
 # gitlawb node explorer
 
-[![CI](https://github.com/Gitlawb/node-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/Gitlawb/node-explorer/actions/workflows/ci.yml)
+[![CI](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A terminal-styled web explorer for a [gitlawb](https://gitlawb.com) node — browse live
@@ -26,7 +26,7 @@ push events, straight from the node's REST API.
 Requires Node.js 20+.
 
 ```sh
-git clone https://github.com/Gitlawb/node-explorer.git
+git clone https://github.com/Twigpine/node-explorer.git
 cd node-explorer
 npm install
 npm run dev

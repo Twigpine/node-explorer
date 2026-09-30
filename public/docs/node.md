@@ -1,6 +1,6 @@
 # Running a gitlawb node
 
-Step-by-step guide to registering and operating a gitlawb node. The reference node implementation lives at [Gitlawb/node](https://github.com/Gitlawb/node).
+Step-by-step guide to registering and operating a gitlawb node. The reference node implementation lives at [Twigpine/node](https://github.com/Twigpine/node).
 
 Running a node requires no token. Write-node access lock is not live on Base yet. The live network does not require a lock today.
 
@@ -42,7 +42,7 @@ docker run -d \
   -v gitlawb-data:/data \
   -e DATABASE_URL=postgresql://user:pass@host/gitlawb \
   -e GITLAWB_PUBLIC_URL=https://my-node.example.com \
-  ghcr.io/gitlawb/node:latest
+  ghcr.io/twigpine/node:latest
 ```
 
 **docker-compose:** the repo's `docker-compose.yml` bundles node + Postgres.

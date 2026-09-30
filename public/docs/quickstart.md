@@ -11,7 +11,7 @@ Pick one:
 npm install -g @gitlawb/gl
 
 # Homebrew (macOS / Linux) — brew 6+ requires trusting third-party taps
-brew tap gitlawb/tap && brew trust gitlawb/tap && brew install gl
+brew tap twigpine/tap && brew trust twigpine/tap && brew install gl
 
 # curl installer (macOS / Linux)
 curl -sSf https://gitlawb.com/install.sh | sh

@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gitlawb/node-explorer.git"
+    "url": "https://github.com/Twigpine/node-explorer.git"
   },
   "type": "module",
   "scripts": {

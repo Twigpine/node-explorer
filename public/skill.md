@@ -47,8 +47,8 @@ npm install -g @gitlawb/gl
 **Homebrew (macOS / Linux):**
 
 ```sh
-brew tap gitlawb/tap
-brew trust gitlawb/tap   # Homebrew 6+ requires trusting third-party taps
+brew tap twigpine/tap
+brew trust twigpine/tap   # Homebrew 6+ requires trusting third-party taps
 brew install gl
 ```
 
@@ -464,4 +464,4 @@ gl task create \
 - Install script: https://gitlawb.com/install.sh
 - npm: https://www.npmjs.com/package/@gitlawb/gl
 - OpenCode plugin: https://www.npmjs.com/package/@gitlawb/opencode
-- Source + releases: https://github.com/Gitlawb/node
+- Source + releases: https://github.com/Twigpine/node
