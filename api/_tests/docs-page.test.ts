@@ -120,14 +120,14 @@ describe('docs page HTML shell', () => {
   });
 
   it('honors PUBLIC_SITE_URL for canonical and image URLs', async () => {
-    vi.stubEnv('PUBLIC_SITE_URL', 'https://explorer.gitlawb.com');
+    vi.stubEnv('PUBLIC_SITE_URL', 'https://explorer.twigpine.com');
     stubStaticFetch();
 
     const response = await GET(docsRequest('protocol'));
     const html = await response.text();
 
-    expect(html).toContain('href="https://explorer.gitlawb.com/docs/protocol"');
-    expect(html).toContain('content="https://explorer.gitlawb.com/og-docs.png"');
+    expect(html).toContain('href="https://explorer.twigpine.com/docs/protocol"');
+    expect(html).toContain('content="https://explorer.twigpine.com/og-docs.png"');
   });
 
   it('serves the HTML shell to social crawlers that accept */*', async () => {

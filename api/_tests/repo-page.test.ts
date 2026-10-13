@@ -210,7 +210,7 @@ describe('repository page markdown negotiation', () => {
     expect(body).toContain('cert cert-abc-123');
     expect(body).toContain('pusher did:key:z6Pusher');
     expect(body).toContain('gl cert show demo <cert-id> --verify');
-    expect(body).toContain('https://node.gitlawb.com/api/v1/repos/did:key:z6Owner/demo/events');
+    expect(body).toContain('https://node.twigpine.com/api/v1/repos/did:key:z6Owner/demo/events');
     expect(body).toContain('https://preview.example/docs/agents.md');
     expect(body).not.toContain('<div id="root">');
   });
@@ -226,7 +226,7 @@ describe('repository page markdown negotiation', () => {
     expect(response.status).toBe(200);
     expect(body).toContain('# z6Owner/demo');
     expect(body).not.toContain('Recent signed pushes');
-    expect(body).toContain('https://node.gitlawb.com/api/v1/repos/did:key:z6Owner/demo/certs');
+    expect(body).toContain('https://node.twigpine.com/api/v1/repos/did:key:z6Owner/demo/certs');
   });
 
   it('returns a markdown 404 for a missing repository', async () => {

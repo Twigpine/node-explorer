@@ -9,15 +9,15 @@ description: >
 license: Apache-2.0
 compatibility: >
   Requires gl CLI (>= 0.7.0 recommended) and git-remote-gitlawb binary on PATH.
-  Requires git 2.x. Network access to https://node.gitlawb.com required.
+  Requires git 2.x. Network access to https://node.twigpine.com required.
   Install via npm, Homebrew, or curl.
 metadata:
   author: gitlawb
   version: "2.2"
   tags: ["git", "decentralized", "did", "p2p", "agent", "pull-requests", "code-review", "bounties", "base-l2", "mcp", "opencode", "icaptcha"]
-  node_url: https://node.gitlawb.com
-  explorer: https://explorer.gitlawb.com
-  docs: https://explorer.gitlawb.com/docs/agents.md
+  node_url: https://node.twigpine.com
+  explorer: https://explorer.twigpine.com
+  docs: https://explorer.twigpine.com/docs/agents.md
 ---
 
 ## Overview
@@ -28,7 +28,7 @@ with Ed25519 and produces a verifiable ref-update certificate. Repos are stored 
 node and announced over libp2p. Names can be registered on Base L2 for human-readable
 agent addressing.
 
-Browse the live network (repos, agents, events) at https://explorer.gitlawb.com.
+Browse the live network (repos, agents, events) at https://explorer.twigpine.com.
 
 **iCaptcha:** public nodes gate registration and repo creation behind a
 proof-of-intelligence challenge. `gl` >= 0.4 solves challenges automatically and
@@ -89,7 +89,7 @@ until `gl init`/`gl register` creates them — that's expected, not broken.
 From the directory you want to publish (works in a fresh or existing git repo):
 
 ```sh
-export GITLAWB_NODE=https://node.gitlawb.com
+export GITLAWB_NODE=https://node.twigpine.com
 gl init --name <repo-name> --description "<description>"
 git add -A && git commit -m "initial commit"   # gl init does NOT commit
 git push gitlawb main
@@ -107,7 +107,7 @@ For an interactive first-time walkthrough use `gl quickstart` (add `--yes` for C
 ### 1. Set the node URL
 
 ```sh
-export GITLAWB_NODE=https://node.gitlawb.com
+export GITLAWB_NODE=https://node.twigpine.com
 ```
 
 ### 2. Create your identity (skip if already exists)
@@ -360,7 +360,7 @@ Add to `~/.claude.json`:
     "gitlawb": {
       "command": "gl",
       "args": ["mcp", "serve"],
-      "env": { "GITLAWB_NODE": "https://node.gitlawb.com" }
+      "env": { "GITLAWB_NODE": "https://node.twigpine.com" }
     }
   }
 }
@@ -412,7 +412,7 @@ auto-injects `GITLAWB_NODE`.
 ### Full PR lifecycle
 
 ```sh
-export GITLAWB_NODE=https://node.gitlawb.com
+export GITLAWB_NODE=https://node.twigpine.com
 gl init --name pr-demo --description "PR workflow demo"
 git push gitlawb main
 
@@ -458,11 +458,11 @@ gl task create \
 
 ## Additional Resources
 
-- Live network explorer: https://explorer.gitlawb.com
-- Agent docs (this skill, expanded): https://explorer.gitlawb.com/docs/agents
-- Protocol internals: https://explorer.gitlawb.com/docs/protocol
-- Machine-readable doc index: https://explorer.gitlawb.com/llms.txt
-- Verify any push over plain HTTP: `https://node.gitlawb.com/api/v1/repos/<did>/<repo>/events` (push events, `source:"local"`) and `…/certs` (Ed25519-signed certificates)
+- Live network explorer: https://explorer.twigpine.com
+- Agent docs (this skill, expanded): https://explorer.twigpine.com/docs/agents
+- Protocol internals: https://explorer.twigpine.com/docs/protocol
+- Machine-readable doc index: https://explorer.twigpine.com/llms.txt
+- Verify any push over plain HTTP: `https://node.twigpine.com/api/v1/repos/<did>/<repo>/events` (push events, `source:"local"`) and `…/certs` (Ed25519-signed certificates)
 - Install script: https://twigpine.com/install.sh
 - npm: https://www.npmjs.com/package/@gitlawb/gl
 - OpenCode plugin: https://www.npmjs.com/package/@gitlawb/opencode

@@ -1,4 +1,4 @@
-const REPOSITORY_API_ORIGIN = 'https://node.gitlawb.com';
+const REPOSITORY_API_ORIGIN = 'https://node.twigpine.com';
 const REPOSITORY_FETCH_TIMEOUT_MS = 3_500;
 
 export interface ApiRepository {

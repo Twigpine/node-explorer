@@ -18,7 +18,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://node.gitlawb.com',
+        target: 'https://node.twigpine.com',
         changeOrigin: true,
         secure: true,
         bypass(req) {
@@ -31,7 +31,7 @@ export default defineConfig({
       },
       // Node identity lives at the node's root path, which the SPA occupies locally.
       '/node-info': {
-        target: 'https://node.gitlawb.com',
+        target: 'https://node.twigpine.com',
         changeOrigin: true,
         secure: true,
         rewrite: () => '/',
@@ -41,8 +41,8 @@ export default defineConfig({
       // peer's root; everything else keeps its path with the prefix stripped.
       ...Object.fromEntries(
         [
-          ['node2', 'https://node2.gitlawb.com'],
-          ['node3', 'https://node3.gitlawb.com'],
+          ['node2', 'https://node2.twigpine.com'],
+          ['node3', 'https://node3.twigpine.com'],
           ['manila', 'https://manila.gitlawb.com'],
         ].map(([id, target]) => [
           `/nodes/${id}`,

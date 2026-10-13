@@ -25,7 +25,7 @@ import {
 
 describe('peerHost', () => {
   it('reduces a URL to its host', () => {
-    expect(peerHost('https://node2.gitlawb.com')).toBe('node2.gitlawb.com');
+    expect(peerHost('https://node2.twigpine.com')).toBe('node2.twigpine.com');
   });
 
   it('keeps non-default ports', () => {

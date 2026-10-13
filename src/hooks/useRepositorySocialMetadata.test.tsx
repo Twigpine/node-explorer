@@ -18,7 +18,7 @@ const REPOSITORY: Repository = {
   isMirror: false,
   commits: [],
   files: [],
-  cloneUrl: 'https://node.gitlawb.com/example.git',
+  cloneUrl: 'https://node.twigpine.com/example.git',
   updatedAtRaw: '2026-07-10T01:02:03.456Z',
   createdAtRaw: '2026-01-02T03:04:05.000Z',
 };

@@ -11,7 +11,7 @@ const repository = {
   description: 'A carefully curated collection of digital garden tools and references.',
   is_public: true,
   default_branch: 'main',
-  clone_url: 'https://node.gitlawb.com/repo.git',
+  clone_url: 'https://node.twigpine.com/repo.git',
   star_count: 42,
   created_at: '2025-01-02T03:04:05.000Z',
   updated_at: '2026-07-10T12:00:00.000Z',
@@ -50,7 +50,7 @@ describe('repository OG image', () => {
     const owner = encodeURIComponent(repository.owner_did);
     const version = encodeURIComponent(repoCacheVersion(repository));
     const response = await GET(new Request(
-      `https://explorer.gitlawb.com/api/og?owner=${owner}&name=${repository.name}&v=${version}`,
+      `https://explorer.twigpine.com/api/og?owner=${owner}&name=${repository.name}&v=${version}`,
     ));
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -73,7 +73,7 @@ describe('repository OG image', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const response = await GET(new Request(
-      'https://explorer.gitlawb.com/api/og?owner=z6Private&name=private-repository&v=stale',
+      'https://explorer.twigpine.com/api/og?owner=z6Private&name=private-repository&v=stale',
     ));
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -87,7 +87,7 @@ describe('repository OG image', () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    const response = await GET(new Request('https://explorer.gitlawb.com/api/og?owner=z6Only'));
+    const response = await GET(new Request('https://explorer.twigpine.com/api/og?owner=z6Only'));
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(response.headers.get('x-gitlawb-og-variant')).toBe('generic');
@@ -104,7 +104,7 @@ describe('repository OG image', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const response = await GET(new Request(
-      'https://explorer.gitlawb.com/api/og?owner=z6Unicode&name=unicode-repository',
+      'https://explorer.twigpine.com/api/og?owner=z6Unicode&name=unicode-repository',
     ));
 
     expect(fetchMock).toHaveBeenCalledTimes(1);

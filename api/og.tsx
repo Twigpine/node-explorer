@@ -729,7 +729,7 @@ export function GenericOgCard(): ReactElement {
           width: '100%',
         }}
       >
-        <div style={{ display: 'flex' }}>explorer.gitlawb.com</div>
+        <div style={{ display: 'flex' }}>explorer.twigpine.com</div>
         <div style={{ color: colors.warm, display: 'flex' }}>OPEN / VERIFY / FEDERATE</div>
       </div>
     </Frame>

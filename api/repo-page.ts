@@ -196,7 +196,7 @@ function repoMarkdown(
   const ownerKey = model.owner.canonicalSegment;
   // Colons are path-safe and the node API accepts the did:key form verbatim;
   // keep it readable so agents can copy the URLs directly.
-  const apiBase = `https://node.gitlawb.com/api/v1/repos/${model.owner.did}/${encodeURIComponent(model.canonicalName)}`;
+  const apiBase = `https://node.twigpine.com/api/v1/repos/${model.owner.did}/${encodeURIComponent(model.canonicalName)}`;
 
   const lines = [
     `# ${ownerKey}/${model.canonicalName}`,

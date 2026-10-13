@@ -187,7 +187,7 @@ function hubMarkdown(origin: string): string {
     `- ${origin}/llms.txt — machine-readable index of everything on this site`,
     '',
     `Live network explorer (repos, agents, events): ${origin}/`,
-    `Node API: https://node.gitlawb.com/api/v1 (e.g. /repos, /repos/{owner}/{repo}/events, /repos/{owner}/{repo}/certs)`,
+    `Node API: https://node.twigpine.com/api/v1 (e.g. /repos, /repos/{owner}/{repo}/events, /repos/{owner}/{repo}/certs)`,
     '',
   );
   return lines.join('\n');

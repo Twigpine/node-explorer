@@ -57,7 +57,7 @@ export default function Footer() {
                 <li><a href="/skill.md" className={linkCls}>skill.md</a></li>
                 <li>
                   <a
-                    href="https://node.gitlawb.com/api/v1/repos"
+                    href="https://node.twigpine.com/api/v1/repos"
                     target="_blank"
                     rel="noopener"
                     className={linkCls}

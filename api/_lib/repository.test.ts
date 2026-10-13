@@ -32,7 +32,7 @@ describe('fetchRepository', () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(String(fetchMock.mock.calls[0][0])).toBe(
-      'https://node.gitlawb.com/api/v1/repos/did%3Akey%3Az6%20Owner/demo%2Fname',
+      'https://node.twigpine.com/api/v1/repos/did%3Akey%3Az6%20Owner/demo%2Fname',
     );
     expect(fetchMock.mock.calls[0][1]).toMatchObject({ method: 'GET', cache: 'no-store' });
   });

@@ -14,7 +14,7 @@ the conventions the codebase follows, and what to expect from the review process
    ```
 
    Requires Node.js 20+. The dev server proxies API calls to
-   `https://node.gitlawb.com` — no backend setup needed.
+   `https://node.twigpine.com` — no backend setup needed.
 
 3. Create a branch off `main` for your change:
 

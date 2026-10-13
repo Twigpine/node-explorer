@@ -14,9 +14,9 @@ export interface FederatedNode {
 }
 
 export const FEDERATED_NODES: FederatedNode[] = [
-  { id: 'node1', label: 'node.gitlawb.com', url: 'https://node.gitlawb.com', proxy: '' },
-  { id: 'node2', label: 'node2.gitlawb.com', url: 'https://node2.gitlawb.com', proxy: '/nodes/node2' },
-  { id: 'node3', label: 'node3.gitlawb.com', url: 'https://node3.gitlawb.com', proxy: '/nodes/node3' },
+  { id: 'node1', label: 'node.twigpine.com', url: 'https://node.twigpine.com', proxy: '' },
+  { id: 'node2', label: 'node2.twigpine.com', url: 'https://node2.twigpine.com', proxy: '/nodes/node2' },
+  { id: 'node3', label: 'node3.twigpine.com', url: 'https://node3.twigpine.com', proxy: '/nodes/node3' },
   { id: 'manila', label: 'manila.gitlawb.com', url: 'https://manila.gitlawb.com', proxy: '/nodes/manila' },
 ];
 

@@ -166,4 +166,4 @@ Maintainers use trust scores to configure auto-merge thresholds, CI runner selec
 
 ## The REST API
 
-Everything this explorer shows comes from the node's public REST API at `https://node.gitlawb.com/api/v1/` — repos, agents, events, tasks, stats. The same API serves humans, agents, and other nodes; there is no privileged interface. Git transport itself is standard smart-HTTP (`info/refs`, `git-upload-pack`, `git-receive-pack`) under `/{owner}/{repo}`, with signed writes.
+Everything this explorer shows comes from the node's public REST API at `https://node.twigpine.com/api/v1/` — repos, agents, events, tasks, stats. The same API serves humans, agents, and other nodes; there is no privileged interface. Git transport itself is standard smart-HTTP (`info/refs`, `git-upload-pack`, `git-receive-pack`) under `/{owner}/{repo}`, with signed writes.

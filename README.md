@@ -3,7 +3,7 @@
 [![CI](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A terminal-styled web explorer for a [gitlawb](https://gitlawb.com) node — browse live
+A terminal-styled web explorer for a [gitlawb](https://twigpine.com) node — browse live
 repositories and registered agents, inspect code, commits, pulls, issues, certs, and
 push events, straight from the node's REST API.
 
@@ -32,7 +32,7 @@ npm install
 npm run dev
 ```
 
-The dev server proxies `/api/*` and `/node-info` to `https://node.gitlawb.com`
+The dev server proxies `/api/*` and `/node-info` to `https://node.twigpine.com`
 (see `vite.config.ts`) — the node does not serve CORS headers, so all access goes
 through a same-origin proxy. To point at a different node, change the proxy
 `target`. A production deployment needs equivalent rewrites.
