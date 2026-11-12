@@ -1,4 +1,3 @@
-import { Circle } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useCallback, useRef, useState } from 'react';
 import { SearchField } from '../components/register/SearchField';
@@ -6,10 +5,9 @@ import { useListNav } from '../hooks/useShortcuts';
 import { DEFAULT_PER_PAGE, PER_PAGE_OPTIONS } from '../lib/constants';
 import { usePeers } from '../hooks/usePeers';
 import { PeerList } from '../components/peers/PeerList';
-import { PeerOrbit } from '../components/peers/PeerOrbit';
 import { RepoPagination } from '../components/repos/RepoPagination';
 import { RepoHero } from '../components/repos/RepoHero';
-import { MicroLabel } from '../components/ui/MicroLabel';
+import { LiveDot } from '../components/brand/Chrome';
 import { CopyButton } from '../components/ui/CopyButton';
 
 export default function PeersPage() {
@@ -65,9 +63,10 @@ export default function PeersPage() {
         countNoun="peers"
         description={
           <p className="m-0">
-            Other gitlawb nodes this node has discovered. Peers announce over HTTP, exchange{' '}
-            <code className="text-accent">ref-update</code> gossip on libp2p, and replicate
-            repos across the federation. Ping any peer to check it live.
+            Other nodes this node has discovered. Peers announce over HTTP, exchange{' '}
+            <code className="font-mono text-[14px] text-foreground">ref-update</code> gossip on
+            libp2p, and replicate repositories across the federation. Ping any peer to check it
+            live.
           </p>
         }
         cells={[
@@ -85,24 +84,19 @@ export default function PeersPage() {
 
       <div className="pt-2 pb-20">
 
-        {/* The federation, drawn as an orbit around this node. */}
-        {peers && peers.length > 0 && (
-          <PeerOrbit peers={peers} nodeName={p2p?.peer_id ? 'this node' : undefined} />
-        )}
-
         {/* P2P identity strip */}
         {p2p?.enabled && p2p.peer_id && (
-          <div className="flex items-center gap-x-4 gap-y-2 flex-wrap border-t border-border pt-3 mb-6">
-            <span className="flex items-center gap-2">
-              <Circle size={7} fill="currentColor" aria-hidden="true" className="text-success" />
-              <MicroLabel>libp2p</MicroLabel>
+          <div className="flex items-center gap-x-4 gap-y-2 flex-wrap border-y border-separator py-2.5 mb-6">
+            <span className="flex items-center gap-2 text-[13px] text-foreground">
+              <LiveDot on={(p2p.connected_peers ?? 0) > 0} />
+              libp2p
             </span>
-            <span className="text-[12px] text-muted truncate font-mono" title={p2p.peer_id}>
+            <span className="text-[12.5px] text-muted truncate font-mono" title={p2p.peer_id}>
               {p2p.peer_id.slice(0, 12)}…{p2p.peer_id.slice(-8)}
             </span>
-            <CopyButton value={p2p.peer_id} label="peer id" />
+            <CopyButton value={p2p.peer_id} label="Copy" srLabel="Copy the libp2p peer id" />
             {(p2p.topics ?? []).map(t => (
-              <span key={t} className="text-[12px] text-accent border border-border rounded-full px-2 py-[1px] font-mono">
+              <span key={t} className="font-mono text-[12.5px] text-subtle">
                 {t}
               </span>
             ))}
@@ -123,8 +117,8 @@ export default function PeersPage() {
         />
 
         {error ? (
-          <div className="border-t border-border py-16 text-center">
-            <p className="m-0 text-[13px] text-danger mb-4">failed to load peers: {error}</p>
+          <div className="border-t border-border py-14">
+            <p className="m-0 text-[14px] text-danger">Failed to load peers: {error}</p>
           </div>
         ) : (
           <>

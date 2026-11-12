@@ -42,7 +42,7 @@ export function SearchField({
         placeholder={placeholder}
         autoComplete="off"
         spellCheck="false"
-        className="h-10 w-full rounded-full pl-9 pr-3"
+        className="h-9 w-full pl-9 pr-3"
       />
     </div>
   );

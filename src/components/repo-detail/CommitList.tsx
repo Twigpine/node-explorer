@@ -1,3 +1,4 @@
+import { CopyValue } from '../ui/CopyValue';
 import { Table } from '../register/controls';
 import type { RepoCommit } from '../../types/repo';
 
@@ -9,7 +10,7 @@ export function CommitList({ commits }: CommitListProps) {
   if (commits.length === 0) {
     return (
       <div className="flex items-center justify-center py-14 border border-border">
-        <p className="m-0 text-[13px] text-muted">no commits yet</p>
+        <p className="m-0 text-[14px] text-muted">No commits yet.</p>
       </div>
     );
   }
@@ -20,16 +21,16 @@ export function CommitList({ commits }: CommitListProps) {
         <Table.ScrollContainer>
           <Table.Content aria-label="Commits">
             <Table.Header>
-              <Table.Column className="text-[12px] font-semibold text-muted h-9 px-4 w-24 sm:w-28">
+              <Table.Column className="text-[12px] font-normal text-subtle h-9 px-4 w-24 sm:w-28">
                 Hash
               </Table.Column>
-              <Table.Column className="text-[12px] font-semibold text-muted h-9 px-4">
+              <Table.Column className="text-[12px] font-normal text-subtle h-9 px-4">
                 Message
               </Table.Column>
-              <Table.Column className="hidden sm:table-cell text-[12px] font-semibold text-muted h-9 px-4 w-32">
+              <Table.Column className="hidden sm:table-cell text-[12px] font-normal text-subtle h-9 px-4 w-32">
                 Author
               </Table.Column>
-              <Table.Column className="text-[12px] font-semibold text-muted h-9 px-4 text-right w-24 sm:w-28">
+              <Table.Column className="text-[12px] font-normal text-subtle h-9 px-4 text-right w-24 sm:w-28">
                 When
               </Table.Column>
             </Table.Header>
@@ -37,9 +38,9 @@ export function CommitList({ commits }: CommitListProps) {
               {commits.map(commit => (
                 <Table.Row key={commit.hash}>
                   <Table.Cell className="px-4 sm:px-6 py-2.5 sm:py-3">
-                    <span className="text-[12px] sm:text-[13px] text-accent">
+                    <CopyValue value={commit.hash} name="commit" className="text-[12.5px] text-foreground">
                       {commit.shortHash}
-                    </span>
+                    </CopyValue>
                   </Table.Cell>
                   <Table.Cell className="px-4 sm:px-6 py-2.5 sm:py-3 min-w-0">
                     <span className="block truncate text-[13px] sm:text-[14px] text-foreground">

@@ -28,10 +28,10 @@ export function DocsPager({ previous, next }: DocsPagerProps) {
       {previous ? (
         <Link
           to={`/docs/${previous.slug}`}
-          className="group flex flex-col gap-1 rounded-[var(--radius)] border border-border px-4 py-3 transition-colors hover:border-foreground/40 hover:bg-surface-secondary"
+          className="group flex flex-col gap-1 border border-border px-4 py-3 transition-colors hover:border-foreground"
         >
-          <span className="text-[11.5px] text-muted">← Previous</span>
-          <span className="text-[14px] font-medium text-foreground">{previous.title}</span>
+          <span className="text-[12.5px] text-subtle">← Previous</span>
+          <span className="text-[15px] font-[540] text-foreground">{previous.title}</span>
         </Link>
       ) : (
         <span aria-hidden="true" className="hidden sm:block" />
@@ -40,10 +40,10 @@ export function DocsPager({ previous, next }: DocsPagerProps) {
       {next && (
         <Link
           to={`/docs/${next.slug}`}
-          className="group flex flex-col gap-1 rounded-[var(--radius)] border border-border px-4 py-3 text-right transition-colors hover:border-foreground/40 hover:bg-surface-secondary sm:col-start-2"
+          className="group flex flex-col gap-1 border border-border px-4 py-3 text-right transition-colors hover:border-foreground sm:col-start-2"
         >
-          <span className="text-[11.5px] text-muted">Next →</span>
-          <span className="text-[14px] font-medium text-foreground">{next.title}</span>
+          <span className="text-[12.5px] text-subtle">Next →</span>
+          <span className="text-[15px] font-[540] text-foreground">{next.title}</span>
         </Link>
       )}
     </nav>

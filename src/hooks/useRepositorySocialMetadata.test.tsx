@@ -39,7 +39,7 @@ describe('useRepositorySocialMetadata', () => {
   beforeEach(() => {
     (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean })
       .IS_REACT_ACT_ENVIRONMENT = true;
-    document.head.innerHTML = '<title>gitlawb explorer</title>';
+    document.head.innerHTML = '<title>Twigpine Explorer</title>';
     container = document.createElement('div');
     document.body.append(container);
     root = createRoot(container);
@@ -53,7 +53,7 @@ describe('useRepositorySocialMetadata', () => {
   it('updates route metadata and restores the generic site metadata on cleanup', () => {
     act(() => root.render(<Harness repo={REPOSITORY} />));
 
-    expect(document.title).toBe('z6MkqRzA/digital-garden · gitlawb explorer');
+    expect(document.title).toBe('z6MkqRzA/digital-garden · Twigpine Explorer');
     expect(metaContent('meta[property="og:description"]')).toBe(REPOSITORY.description);
     expect(metaContent('meta[property="og:image"]')).toContain(
       '/og/repos/z6MkqRzACJ5iCDdkiymAPK3gq18z2iecZHeAuUyW6JnwRfoM/digital-garden/',
@@ -63,7 +63,7 @@ describe('useRepositorySocialMetadata', () => {
 
     act(() => root.render(<Harness repo={null} />));
 
-    expect(document.title).toBe('gitlawb explorer');
+    expect(document.title).toBe('Twigpine Explorer');
     expect(metaContent('meta[property="og:image"]')).toBe(`${window.location.origin}/og.png`);
     expect(metaContent('meta[name="robots"]')).toBe('index,follow');
   });
@@ -73,7 +73,7 @@ describe('useRepositorySocialMetadata', () => {
       <Harness repo={{ ...REPOSITORY, visibility: 'private', description: 'secret description' }} />,
     ));
 
-    expect(document.title).toBe('private repository · gitlawb explorer');
+    expect(document.title).toBe('private repository · Twigpine Explorer');
     expect(metaContent('meta[property="og:description"]')).not.toContain('secret');
     expect(metaContent('meta[property="og:image"]')).toBe(`${window.location.origin}/og.png`);
     expect(metaContent('meta[name="robots"]')).toBe('noindex,nofollow');

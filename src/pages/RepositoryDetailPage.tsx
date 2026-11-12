@@ -15,8 +15,8 @@ import { DetailTabs } from '../components/repo-detail/DetailTabs';
 import { Skeleton } from '../components/ui/Skeleton';
 function PageBreadcrumb({ owner, name }: { owner: string; name: string }) {
   return (
-    <nav aria-label="breadcrumb" className="mb-8 sm:mb-10">
-      <ol className="flex items-center gap-1.5 sm:gap-2 text-[12.5px] flex-nowrap min-w-0 text-muted">
+    <nav aria-label="breadcrumb" className="mb-6">
+      <ol className="m-0 flex list-none items-center gap-1.5 p-0 font-mono text-[12.5px] flex-nowrap min-w-0 text-subtle">
         <li className="shrink-0 inline-flex items-center gap-1.5">
           <Link
             to="/repos"
@@ -26,13 +26,13 @@ function PageBreadcrumb({ owner, name }: { owner: string; name: string }) {
             repos
           </Link>
         </li>
-        <li role="presentation" aria-hidden="true" className="text-muted shrink-0">/</li>
+        <li role="presentation" aria-hidden="true" className="shrink-0">/</li>
         <li className="shrink-0 min-w-0 max-w-[100px] sm:max-w-[180px] inline-flex items-center gap-1.5">
-          <span className="text-muted truncate block">{shortDid(owner)}</span>
+          <span className="truncate block">{shortDid(owner)}</span>
         </li>
         <li role="presentation" aria-hidden="true" className="text-muted shrink-0">/</li>
         <li className="min-w-0 inline-flex items-center gap-1.5">
-          <span className="text-foreground font-bold truncate block">{name}</span>
+          <span className="text-foreground truncate block">{name}</span>
         </li>
       </ol>
     </nav>
@@ -46,17 +46,16 @@ function StatusShell({ owner, name, title, message }: {
   message: string;
 }) {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <PageBreadcrumb owner={owner} name={name} />
-      <div className="flex flex-col items-center justify-center py-24 sm:py-32 text-center border border-border">
-        <h2 className="text-[18px] font-bold mb-3 text-foreground lowercase">{title}</h2>
-        <p className="m-0 text-[13px] mb-8 text-muted">{message}</p>
+      <div className="border-t border-border py-16">
+        <h1 className="m-0 text-[28px] font-[540] tracking-[-0.03em] text-foreground">{title}</h1>
+        <p className="m-0 mt-2 text-[15px] text-muted">{message}</p>
         <Link
           to="/repos"
-          className="text-[13px] text-accent hover:underline
-            focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          className="mt-6 inline-block text-[14px] text-foreground underline decoration-[var(--rule-2)] underline-offset-4 hover:decoration-current"
         >
-          ← back to repositories
+          ← Back to repositories
         </Link>
       </div>
     </div>
@@ -65,7 +64,7 @@ function StatusShell({ owner, name, title, message }: {
 
 function LoadingState({ owner, name }: { owner: string; name: string }) {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12" aria-busy="true">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6" aria-busy="true">
       <PageBreadcrumb owner={owner} name={name} />
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 lg:gap-10 mb-8 sm:mb-10">
         <div>
@@ -142,14 +141,14 @@ export default function RepositoryDetailPage() {
   });
 
   if (loading) return <LoadingState owner={owner} name={name} />;
-  if (error) return <StatusShell owner={owner} name={name} title="failed to load repository" message={error} />;
+  if (error) return <StatusShell owner={owner} name={name} title="Failed to load repository" message={error} />;
   if (notFound || !repo) {
     return (
       <StatusShell
         owner={owner}
         name={name}
-        title="repository not found"
-        message={`${shortDid(owner)}/${name} doesn't exist on this node.`}
+        title="Repository not found"
+        message={`${shortDid(owner)}/${name} does not exist on this node.`}
       />
     );
   }
@@ -159,8 +158,8 @@ export default function RepositoryDetailPage() {
       <PageBreadcrumb owner={owner} name={name} />
 
       {partialError && (
-        <p className="m-0 mb-5 px-3 py-2 rounded-[var(--radius)] border border-danger/40 bg-danger/5 text-[13px] text-danger">
-          {partialError} — some sections may appear empty
+        <p className="m-0 mb-5 border-l-2 border-danger pl-3 py-1 text-[13.5px] text-danger">
+          {partialError}. Some sections may appear empty.
         </p>
       )}
 
@@ -173,8 +172,8 @@ export default function RepositoryDetailPage() {
       {/* An open file is the primary workspace and takes the full width. The
           clone panel returns when the visitor goes back to repository browsing. */}
       <div className={cn(
-        'mt-6 grid gap-x-10 gap-y-8',
-        !fileOpen && 'lg:grid-cols-[minmax(0,1fr)_268px]',
+        'mt-6 grid gap-x-12 gap-y-8',
+        !fileOpen && 'lg:grid-cols-[minmax(0,1fr)_300px]',
       )}>
         <div className="min-w-0">
           <DetailTabs
@@ -189,7 +188,7 @@ export default function RepositoryDetailPage() {
           <aside className="min-w-0 flex flex-col gap-6">
             <ClonePanel
               cloneUrl={repo.cloneUrl}
-              gitlawbUrl={`gitlawb://${didKeySegment(repo.owner)}/${repo.name}`}
+              remoteUrl={`gitlawb://${didKeySegment(repo.owner)}/${repo.name}`}
               onNavigate={setTab}
             />
           </aside>

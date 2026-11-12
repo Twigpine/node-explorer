@@ -1,11 +1,9 @@
-import { Circle } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import type { RepoFile } from '../../types/repo';
 import { getBlob } from '../../lib/api';
 import { findReadmeName } from '../../lib/lang';
 import { extractTocHeadings } from '../../lib/toc';
 import { Skeleton } from '../ui/Skeleton';
-import { MicroLabel } from '../ui/MicroLabel';
 import { MarkdownView } from './MarkdownView';
 import { TocRail } from './TocRail';
 
@@ -59,9 +57,8 @@ export function ReadmePanel({ owner, name, dirPath, entries }: ReadmePanelProps)
 
   return (
     <section className="mt-6 border border-border">
-      <div className="flex items-center gap-3 px-4 sm:px-6 h-10 border-b border-border bg-surface">
-        <Circle size={7} fill="currentColor" aria-hidden="true" className="text-accent" />
-        <MicroLabel>{readmeName}</MicroLabel>
+      <div className="flex items-center px-4 sm:px-6 h-10 border-b border-border">
+        <span className="font-mono text-[12.5px] text-muted">{readmeName}</span>
       </div>
       {state.status === 'loading' ? (
         <div className="p-4 sm:p-6 space-y-3" aria-busy="true" aria-label="loading readme">

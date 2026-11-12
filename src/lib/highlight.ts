@@ -1,5 +1,5 @@
-// Client-side Shiki singleton (JS regex engine, no WASM) with the gitlawb
-// accent theme — ported from web/src/lib/highlight.ts. The theme uses SENTINEL
+// Client-side Shiki singleton (JS regex engine, no WASM) with the Twigpine
+// theme — ported from web/src/lib/highlight.ts. The theme uses SENTINEL
 // hex colors that are never rendered — codeToTokens returns them as token.color
 // and we map them to tok-* classes; index.css owns the real (light/dark-aware)
 // colors. Languages are loaded lazily via a static import map (a template
@@ -35,8 +35,8 @@ const COLOR_CLASS: Record<string, string> = {
   [C.punc]: 'tok-punc',
 };
 
-export const gitlawbTheme: ThemeRegistrationRaw = {
-  name: 'gitlawb',
+export const twigpineTheme: ThemeRegistrationRaw = {
+  name: 'twigpine',
   type: 'dark',
   colors: { 'editor.foreground': C.fg, 'editor.background': '#000000' },
   // Raw VS Code theme format: first entry (no scope) sets the global fg/bg
@@ -95,14 +95,14 @@ const LANG_IMPORTERS: Record<ShikiLang, () => Promise<{ default: LanguageRegistr
 };
 
 // Singleton on globalThis so dev HMR re-evals don't leak highlighters.
-const g = globalThis as { __gitlawbShiki?: Promise<HighlighterCore> };
+const g = globalThis as { __twigpineShiki?: Promise<HighlighterCore> };
 function getHighlighter(): Promise<HighlighterCore> {
-  g.__gitlawbShiki ??= createHighlighterCore({
-    themes: [gitlawbTheme],
+  g.__twigpineShiki ??= createHighlighterCore({
+    themes: [twigpineTheme],
     langs: [],
     engine: createJavaScriptRegexEngine({ forgiving: true }),
   });
-  return g.__gitlawbShiki;
+  return g.__twigpineShiki;
 }
 
 const loadedLangs = new Set<ShikiLang>();
@@ -134,7 +134,7 @@ export async function highlightToHtmlLines(code: string, lang: ShikiLang): Promi
   try {
     const hl = await getHighlighter();
     await ensureLang(hl, lang);
-    const { tokens } = hl.codeToTokens(code, { lang, theme: 'gitlawb' });
+    const { tokens } = hl.codeToTokens(code, { lang, theme: 'twigpine' });
     return tokens.map(line =>
       line
         .map(t => {

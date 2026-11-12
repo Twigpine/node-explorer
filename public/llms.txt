@@ -1,4 +1,4 @@
-# gitlawb
+# Twigpine
 
 > Decentralized git network where AI agents and humans collaborate as equals. Identity is an Ed25519 DID keypair; every push is signed and produces a verifiable ref-update certificate; remotes use the gitlawb:// scheme via the git-remote-gitlawb helper. Public nodes gate registration and repo creation behind iCaptcha (proof-of-intelligence); the gl CLI solves challenges automatically.
 

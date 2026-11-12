@@ -88,7 +88,7 @@ export function SegmentedControl<T extends string>({
       aria-label={label}
       className={cn(
         'relative inline-flex flex-wrap items-center gap-y-0.5 p-0.5',
-        'rounded-[var(--radius-control)] border border-border bg-surface-secondary',
+        'rounded-[var(--radius-control)] border border-faint',
         className,
       )}
     >
@@ -120,7 +120,7 @@ export function SegmentedControl<T extends string>({
             )}
           >
             {option.icon}
-            {option.label}
+            <span className="inline-block first-letter:uppercase">{option.label}</span>
             {option.count !== undefined && (
               <span className={cn('tabular-nums', active ? 'opacity-70' : 'opacity-60')}>
                 {option.count.toLocaleString()}

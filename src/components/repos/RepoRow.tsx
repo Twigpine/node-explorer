@@ -35,38 +35,31 @@ export function RepoRow({ repo }: RepoRowProps) {
       className="group relative grid items-center gap-x-4 sm:gap-x-6
         grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto]
         md:grid-cols-[minmax(0,1fr)_64px_auto]
-        border-b border-separator last:border-b-0 px-4 py-3
+        border-b border-separator last:border-b-0 px-2 py-3
         transition-colors hover:bg-surface-secondary"
     >
-      {/* Accent rail on hover. Pure CSS — a pointer-tracking card per row
-          would put fifty mousemove handlers on one page. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-accent
-          opacity-0 group-hover:opacity-100 transition-opacity"
-      />
       <div className="min-w-0">
         <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
           <Link
             to={`/repos/${encodeURIComponent(repo.owner)}/${encodeURIComponent(repo.name)}`}
             data-row-link
-            className="text-[15px] leading-snug outline-none min-w-0 font-semibold text-accent
+            className="font-mono text-[14px] leading-snug outline-none min-w-0 font-medium text-foreground
               after:absolute after:inset-0 after:content-['']
               hover:underline
               focus-visible:after:outline focus-visible:after:outline-2
               focus-visible:after:outline-accent focus-visible:after:-outline-offset-2"
           >
-            <span className="text-muted font-normal">{shortDid(repo.owner)}/</span>
+            <span className="text-subtle font-normal">{shortDid(repo.owner)}/</span>
             <span className="break-all sm:break-normal">{repo.name}</span>
           </Link>
 
           {restricted && (
-            <span className="rounded-full border border-attention/50 text-attention px-2 py-[1px] text-[12px]">
+            <span className="border border-attention/50 text-attention px-1.5 py-px text-[12px]">
               {repo.visibility}
             </span>
           )}
           {offBranch && (
-            <span className="rounded-full border border-border text-muted px-2 py-[1px] text-[12px]">
+            <span className="border border-border text-muted px-1.5 py-px font-mono text-[12px]">
               {repo.branch}
             </span>
           )}
@@ -85,7 +78,7 @@ export function RepoRow({ repo }: RepoRowProps) {
             less than the sentence does. Desktop keeps one line so the list
             stays scannable at density. */}
         {repo.description && (
-          <p className="m-0 mt-1 text-[13px] leading-snug text-muted line-clamp-2 sm:line-clamp-none sm:truncate">
+          <p className="m-0 mt-1 text-[13.5px] leading-snug text-muted line-clamp-2 sm:line-clamp-none sm:truncate">
             {repo.description}
           </p>
         )}
@@ -98,14 +91,14 @@ export function RepoRow({ repo }: RepoRowProps) {
 
       <div className="mt-1.5 sm:mt-0 flex items-center gap-3 whitespace-nowrap justify-self-start sm:justify-self-end">
         {repo.stars > 0 && (
-          <span className="inline-flex items-center gap-1 text-[13px] tabular text-muted">
-            <Star size={13} className="text-attention" />
+          <span className="inline-flex items-center gap-1 font-mono text-[12px] tabular text-subtle">
+            <Star size={12} />
             {repo.stars}
           </span>
         )}
-        <span className="text-[13px] tabular text-muted">{repo.updatedAt}</span>
+        <span className="w-[60px] text-right font-mono text-[12px] tabular text-subtle">{repo.updatedAt}</span>
         <span className="relative z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-          <CopyButton value={`git clone ${repo.cloneUrl}`} label="clone" />
+          <CopyButton value={`git clone ${repo.cloneUrl}`} label="Clone" srLabel={`Copy the clone command for ${repo.name}`} />
         </span>
       </div>
     </li>

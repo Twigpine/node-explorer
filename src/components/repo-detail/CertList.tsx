@@ -1,74 +1,141 @@
+import type { ReactNode } from 'react';
 import type { ApiCert } from '../../lib/api';
-import { shortDid, shortSha, timeAgo, formatDate } from '../../lib/api';
+import { shortDid, shortSha, timeAgo } from '../../lib/api';
 import { CopyButton } from '../ui/CopyButton';
-import { Field, Seal } from '../register/primitives';
-import { BorderBeam } from '../ui/border-beam';
-import { GitBranch } from 'lucide-react';
+import { Brackets } from '../brand/Chrome';
+import { cn } from '../../lib/utils';
 
 /**
  * Ref-update certificates.
  *
- * This is the product's strongest evidence: each row is an Ed25519 signature
+ * This is the product's strongest evidence: each one is an Ed25519 signature
  * over a ref transition that a reader can check without trusting this node or
- * this page. So each carries the full transition, the pusher, and the command
- * that verifies it — rather than a line of grey metadata.
+ * this page. So a certificate opens as the document it is, every field in
+ * full and copyable, with the command that verifies it, rather than as a line
+ * of grey metadata.
+ *
+ * The list stays scannable because each certificate is a disclosure: one
+ * ruled summary row, and the full document underneath when opened. The newest
+ * is open on arrival and carries the needle.
  */
-export function CertList({ items }: { items: ApiCert[] }) {
+function Line({
+  label,
+  copy,
+  children,
+}: {
+  label: string;
+  copy?: { value: string; name: string };
+  children: ReactNode;
+}) {
   return (
-    <ul className="m-0 p-0 list-none flex flex-col gap-3">
+    <div className="grid grid-cols-[88px_minmax(0,1fr)_auto] items-baseline gap-x-4 border-t border-separator py-2 first:border-t-0 sm:grid-cols-[112px_minmax(0,1fr)_auto]">
+      <dt className="text-[12.5px] text-subtle">{label}</dt>
+      <dd className="m-0 min-w-0 break-all font-mono text-[12.5px] leading-[1.55] text-foreground">
+        {children}
+      </dd>
+      {copy ? (
+        <CopyButton value={copy.value} label="Copy" srLabel={`Copy the ${copy.name}`} className="-my-1" />
+      ) : (
+        <span />
+      )}
+    </div>
+  );
+}
+
+function issuedAt(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
+}
+
+export function CertList({
+  items,
+  repo,
+}: {
+  items: ApiCert[];
+  /** `<owner-key>/<name>`, the form `gl cert show` accepts for any repository. */
+  repo?: string;
+}) {
+  return (
+    <ul className="m-0 list-none border-y border-border p-0">
       {items.map((cert, i) => {
         const created = cert.old_sha.startsWith('0000000');
+        const newest = i === 0;
+        // The full id, not a prefix: a prefix that matches two certificates is
+        // rejected by gl, and this line is meant to be pasted as it stands.
+        const verify = `gl cert show ${repo ?? '<repo>'} ${cert.id} --verify`;
         return (
-          <li
-            key={cert.id}
-            className="relative overflow-hidden px-4 py-3.5 border border-border rounded-[10px] bg-surface"
-          >
-            {/* The newest certificate is the live one; trace only that. */}
-            {i === 0 && (
-              <BorderBeam
-                size={120}
-                duration={9}
-                borderWidth={1.5}
-                colorFrom="var(--color-success)"
-                colorTo="var(--color-foreground)"
-              />
-            )}
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 font-mono text-[13px] text-foreground break-all">
-                <GitBranch size={12} className="text-muted shrink-0" />
-                {cert.ref_name}
-              </span>
-              <Seal label="signed" tone="success" title={`Issued ${formatDate(cert.issued_at)}`} />
-            </div>
+          <li key={cert.id} className="border-t border-separator first:border-t-0">
+            <details
+              // Opened once, when it first appears as the newest. Driving `open`
+              // from `newest` on every render would close a certificate the
+              // reader is in the middle of when a newer one arrives.
+              ref={el => {
+                if (el && newest && !el.dataset.opened) {
+                  el.dataset.opened = 'true';
+                  el.open = true;
+                }
+              }}
+              className="group"
+            >
+              <summary
+                className="grid cursor-pointer list-none grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-4 px-2 py-[10px]
+                  transition-colors hover:bg-surface-secondary md:grid-cols-[minmax(0,1.2fr)_170px_100px_84px_64px]
+                  [&::-webkit-details-marker]:hidden"
+              >
+                <span className="flex min-w-0 items-center gap-2 font-mono text-[13px] text-foreground">
+                  <span
+                    aria-hidden="true"
+                    className={cn('h-[7px] w-[7px] shrink-0 rounded-full', newest ? 'bud-in bg-needle' : 'bg-transparent')}
+                  />
+                  <span className={cn('truncate', newest && 'font-medium')}>{cert.ref_name}</span>
+                </span>
+                <span className="max-md:hidden font-mono text-[12.5px] text-subtle tabular whitespace-nowrap">
+                  {created ? 'new' : shortSha(cert.old_sha)}
+                  <span className="px-1.5">&rarr;</span>
+                  <span className="text-foreground">{shortSha(cert.new_sha)}</span>
+                </span>
+                <span className="max-md:hidden truncate font-mono text-[12.5px] text-muted" title={cert.pusher_did}>
+                  {shortDid(cert.pusher_did)}
+                </span>
+                <span title={cert.issued_at} className="font-mono text-[12px] text-subtle tabular whitespace-nowrap md:text-right">
+                  {timeAgo(cert.issued_at)}
+                </span>
+                <span className="text-right text-[12.5px] text-subtle group-open:text-foreground">
+                  <span className="group-open:hidden">Open</span>
+                  <span className="hidden group-open:inline">Close</span>
+                </span>
+              </summary>
 
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3">
-              <Field label="Certificate">
-                <span className="text-accent">{shortSha(cert.id)}</span>
-              </Field>
-              <Field label={created ? 'Created at' : 'Transition'}>
-                {created ? (
-                  <span className="text-accent">{shortSha(cert.new_sha)}</span>
-                ) : (
-                  <>
-                    <span className="text-muted">{shortSha(cert.old_sha)}</span>
-                    <span className="text-subtle px-1">&rarr;</span>
-                    <span className="text-accent">{shortSha(cert.new_sha)}</span>
-                  </>
-                )}
-              </Field>
-              <Field label="Pusher">{shortDid(cert.pusher_did)}</Field>
-              <Field label="Issued">{timeAgo(cert.issued_at)}</Field>
-            </div>
-
-            <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
-              <code className="font-mono text-[12px] text-muted break-all bg-canvas-inset border border-separator rounded-[var(--radius-sm)] px-2 py-1">
-                gl cert show &lt;repo&gt; {shortSha(cert.id)} --verify
-              </code>
-              <span className="flex items-center gap-2">
-                <CopyButton value={cert.id} label="cert id" />
-                <CopyButton value={cert.signature} label="signature" />
-              </span>
-            </div>
+              <div className="px-2 pb-5 pt-1 sm:pl-[23px]">
+                <Brackets className="border border-separator px-4 py-2">
+                  <dl className="m-0">
+                    <Line label="Certificate" copy={{ value: cert.id, name: 'certificate id' }}>
+                      {cert.id}
+                    </Line>
+                    <Line label="Ref">{cert.ref_name}</Line>
+                    <Line label={created ? 'Created at' : 'From'}>
+                      {created ? cert.new_sha : cert.old_sha}
+                    </Line>
+                    {!created && <Line label="To">{cert.new_sha}</Line>}
+                    <Line label="Pusher" copy={{ value: cert.pusher_did, name: 'pusher DID' }}>
+                      {cert.pusher_did}
+                    </Line>
+                    <Line label="Issued by" copy={{ value: cert.node_did, name: 'node DID' }}>
+                      {cert.node_did}
+                    </Line>
+                    <Line label="Issued">{issuedAt(cert.issued_at)}</Line>
+                    <Line label="Signature" copy={{ value: cert.signature, name: 'signature' }}>
+                      <span className="text-muted">{cert.signature}</span>
+                    </Line>
+                    <Line label="Verify" copy={{ value: verify, name: 'verify command' }}>
+                      <span className="select-none text-subtle">$ </span>
+                      {verify}
+                    </Line>
+                  </dl>
+                </Brackets>
+              </div>
+            </details>
           </li>
         );
       })}

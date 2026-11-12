@@ -1,7 +1,7 @@
 // Replication analysis over per-node ref-update feeds: for each distinct
 // (origin, repo, ref, sha) tuple, which nodes carry it? The origin node always
 // has the tuple (it received the push); others have it iff their gossip feed
-// contains it. Ported from the gitlawb.com web implementation.
+// contains it. Ported from the twigpine.com web implementation.
 import type { ApiRefUpdate } from './api';
 
 export interface EventTuple {

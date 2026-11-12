@@ -1,14 +1,12 @@
 import type { ReactNode } from 'react';
 import { cn } from '../../lib/utils';
-import { NumberTicker } from '../ui/number-ticker';
 
 /**
- * Shared layout primitives, in forge convention.
+ * Shared layout primitives, in Canopy.
  *
- * A bordered box with a subtle header strip, a labelled field, a section
- * heading with an action on the right — the vocabulary this audience already
- * reads on GitHub, GitLab, and Sourcegraph. Craft goes into spacing, density,
- * and states rather than into a distinctive look.
+ * A ledger is ruled, not boxed: regions are separated by hairlines and
+ * whitespace, corners are square, and nothing floats. Headings are Geist in
+ * sentence case; anything a machine emitted is Geist Mono.
  */
 
 /**
@@ -33,7 +31,7 @@ export function Plate({
   as?: 'section' | 'div' | 'article';
 }) {
   return (
-    <Tag className={cn('border border-border rounded-[var(--radius)] bg-surface', className)}>
+    <Tag className={cn('border border-border bg-surface', className)}>
       {children}
     </Tag>
   );
@@ -58,7 +56,7 @@ export function Section({
     <section className={cn('border-t border-border pt-4', className)}>
       {title && (
         <div className="flex items-center justify-between gap-3 mb-3">
-          <h2 className="m-0 text-[14px] font-semibold text-foreground">{title}</h2>
+          <h2 className="m-0 text-[15px] font-[540] tracking-[-0.01em] text-foreground">{title}</h2>
           {action}
         </div>
       )}
@@ -81,11 +79,11 @@ export function BoxHeader({
     <div
       className={cn(
         'flex items-center justify-between gap-3 px-4 py-2.5',
-        'bg-surface-secondary border-b border-border rounded-t-[var(--radius)]',
+        'bg-surface-secondary border-b border-border',
         className,
       )}
     >
-      <h3 className="m-0 text-[13px] font-semibold text-foreground">{title}</h3>
+      <h3 className="m-0 text-[13px] font-[540] text-foreground">{title}</h3>
       {action}
     </div>
   );
@@ -105,7 +103,7 @@ export function Field({
 }) {
   return (
     <div className={cn('min-w-0', className)}>
-      <div className="text-[12px] text-muted mb-0.5">{label}</div>
+      <div className="text-[12px] text-subtle mb-0.5">{label}</div>
       <div
         className={cn(
           'font-mono text-foreground tabular truncate',
@@ -135,7 +133,7 @@ export function SectionRule({
         className,
       )}
     >
-      <h2 className="m-0 text-[16px] font-semibold text-foreground">{title}</h2>
+      <h2 className="m-0 text-[17px] font-[540] tracking-[-0.015em] text-foreground">{title}</h2>
       {action}
     </div>
   );
@@ -153,8 +151,12 @@ export function Counterfoil({
 }
 
 /**
- * A status label. Uses the colours this audience reads without a legend:
- * green for verified, grey for absent, amber for attention.
+ * A status mark: a small glyph and a word, in ink.
+ *
+ * Status is said in words, not colour. The needle is reserved for "live", so
+ * `success` here is a filled ink dot, `neutral` a hollow one; only `danger`
+ * and `attention` take a colour, because a failure has to be findable in a
+ * long column.
  */
 export function Seal({
   label,
@@ -164,27 +166,32 @@ export function Seal({
 }: {
   label: string;
   title?: string;
-  tone?: 'success' | 'neutral' | 'attention' | 'danger';
+  tone?: 'success' | 'neutral' | 'attention' | 'danger' | 'live';
   className?: string;
 }) {
-  const tones = {
-    success: 'border-success/40 text-success bg-success/10',
-    neutral: 'border-border text-muted',
-    attention: 'border-attention/40 text-attention bg-attention/10',
-    danger: 'border-danger/40 text-danger bg-danger/10',
+  const text = {
+    success: 'text-foreground',
+    neutral: 'text-subtle',
+    attention: 'text-attention',
+    danger: 'text-danger',
+    live: 'text-foreground',
   } as const;
 
   return (
     <span
       title={title}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2 py-[2px] text-[12px] font-medium',
-        tones[tone],
+        'inline-flex items-center gap-1.5 whitespace-nowrap text-[12.5px]',
+        text[tone],
         className,
       )}
     >
-      <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true" className="shrink-0">
-        <circle cx="4" cy="4" r="4" fill="currentColor" />
+      <svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true" className="shrink-0">
+        {tone === 'neutral' ? (
+          <circle cx="4" cy="4" r="3.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        ) : (
+          <circle cx="4" cy="4" r="4" fill={tone === 'live' ? 'var(--needle)' : 'currentColor'} />
+        )}
       </svg>
       {label}
     </span>
@@ -192,30 +199,26 @@ export function Seal({
 }
 
 /**
- * Headline counts, set inline and unboxed.
+ * Headline counts, set as one ruled row of figures.
  *
- * Four bordered cells is the hero-metric template; GitHub states counts as
- * plain figures in a row and lets whitespace separate them.
+ * Numbers are stated, not animated: a figure that counts up shows a wrong
+ * value for a second, on a page whose claim is that every figure is real.
  */
 export function Tally({
   entries,
   className,
 }: {
-  entries: { label: string; value: ReactNode; count?: number; to?: string }[];
+  entries: { label: string; value?: ReactNode; count?: number; to?: string }[];
   className?: string;
 }) {
   return (
-    <dl className={cn('flex flex-wrap gap-x-10 gap-y-4 m-0', className)}>
-      {entries.map((e, i) => (
+    <dl className={cn('m-0 flex flex-wrap gap-x-10 gap-y-4', className)}>
+      {entries.map(e => (
         <div key={e.label} className="min-w-0">
-          <dd className="m-0 text-[20px] font-semibold tabular leading-none text-foreground">
-            {typeof e.count === 'number' ? (
-              <NumberTicker value={e.count} delay={0.05 + i * 0.05} className="text-foreground" />
-            ) : (
-              e.value
-            )}
+          <dd className="m-0 text-[22px] font-[540] tabular leading-none tracking-[-0.02em] text-foreground">
+            {typeof e.count === 'number' ? e.count.toLocaleString() : (e.value ?? '—')}
           </dd>
-          <dt className="mt-1 text-[12px] text-muted">{e.label}</dt>
+          <dt className="mt-1.5 text-[12.5px] text-subtle">{e.label}</dt>
         </div>
       ))}
     </dl>

@@ -8,17 +8,17 @@ export function EventList({ items }: { items: ApiRepoEvent[] }) {
       {items.map(event => (
         <li
           key={event.id}
-          className="flex items-center gap-3 flex-wrap px-4 sm:px-6 py-3.5 border-b border-separator last:border-b-0"
+          className="flex items-center gap-3 flex-wrap px-2 py-[10px] border-b border-separator last:border-b-0"
         >
-          <Pill>{event.type === 'local_cert' ? 'local cert' : event.type === 'gossipsub' ? 'gossip' : event.type}</Pill>
-          <span className="text-[12.5px] text-foreground">{event.ref_name}</span>
-          <span className="text-[12px] tabular-nums">
-            <span className="text-muted">{shortSha(event.old_sha)}</span>
-            <span className="text-muted"> → </span>
-            <span className="text-accent">{shortSha(event.new_sha)}</span>
+          <Pill>{event.type === 'local_cert' ? 'Local cert' : event.type === 'gossipsub' ? 'Gossip' : event.type}</Pill>
+          <span className="font-mono text-[13px] text-foreground">{event.ref_name}</span>
+          <span className="font-mono text-[12.5px] tabular-nums">
+            <span className="text-subtle">{shortSha(event.old_sha)}</span>
+            <span className="text-subtle"> → </span>
+            <span className="text-foreground">{shortSha(event.new_sha)}</span>
           </span>
-          <span className="text-[12px] text-muted">by {shortDid(event.pusher_did)}</span>
-          <span className="ml-auto text-[11px] tabular-nums text-muted whitespace-nowrap">
+          <span className="text-[12.5px] text-subtle">by <span className="font-mono text-muted">{shortDid(event.pusher_did)}</span></span>
+          <span className="ml-auto font-mono text-[12px] tabular-nums text-subtle whitespace-nowrap">
             {timeAgo(event.timestamp)}
           </span>
         </li>

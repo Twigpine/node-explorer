@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { Star, GitFork } from 'lucide-react';
 import { shortDid, timeAgo } from '../../lib/api';
 import type { ApiRepo } from '../../lib/api';
-import { MagicCard } from '../ui/magic-card';
 import { Skeleton } from '../ui/Skeleton';
 
 /**
@@ -27,12 +26,11 @@ interface RepoShowcaseProps {
 export function RepoShowcase({ repos, loading, totalCount }: RepoShowcaseProps) {
   if (loading && !repos) {
     return (
-      <div className="grid gap-3 sm:grid-cols-2">
-        {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="rounded-[var(--radius)] border border-border p-4">
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="mt-3 h-3 w-full" />
-            <Skeleton className="mt-1.5 h-3 w-4/5" />
+      <div className="flex flex-col">
+        {Array.from({ length: 9 }, (_, i) => (
+          <div key={i} className="border-t border-separator py-3 first:border-t-0">
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="mt-2 h-3 w-2/3" />
           </div>
         ))}
       </div>
@@ -40,66 +38,51 @@ export function RepoShowcase({ repos, loading, totalCount }: RepoShowcaseProps) 
   }
 
   if (!repos || repos.length === 0) {
-    return <p className="m-0 text-[13px] text-muted">No repositories on this node yet.</p>;
+    return <p className="m-0 text-[13.5px] text-muted">No repositories on this node yet.</p>;
   }
 
   return (
     <>
-      {/* Two-up. This sits in the overview's main column beside a sidebar, not
-          across the full page, so three would squeeze a did:key owner prefix
-          and a description into about 240px. */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        {repos.slice(0, 6).map(repo => (
-          <MagicCard
-            key={repo.id}
-            className="rounded-[var(--radius)] border border-border"
-            gradientColor="var(--color-surface-secondary)"
-            gradientFrom="var(--color-foreground)"
-            gradientTo="var(--color-muted)"
-            gradientOpacity={0.08}
-          >
+      {/* Ruled rows, not cards: the same row the repositories index uses, so
+          the overview is a first page of that list rather than a showcase. */}
+      <ul className="m-0 list-none p-0">
+        {repos.slice(0, 9).map(repo => (
+          <li key={repo.id} className="border-t border-separator first:border-t-0">
             <Link
               to={`/repos/${encodeURIComponent(repo.owner_did)}/${encodeURIComponent(repo.name)}`}
-              className="flex h-full flex-col gap-2 p-4"
+              className="group -mx-2 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 gap-y-0.5 px-2 py-3
+                transition-colors hover:bg-surface-secondary"
             >
-              <span className="flex items-baseline gap-2 min-w-0">
+              <span className="flex min-w-0 items-baseline gap-2">
                 <span className="min-w-0 truncate font-mono text-[13.5px]">
-                  <span className="text-muted">{shortDid(repo.owner_did)}/</span>
-                  <span className="font-semibold text-foreground">{repo.name}</span>
+                  <span className="text-subtle">{shortDid(repo.owner_did)}/</span>
+                  <span className="font-medium text-foreground group-hover:underline">{repo.name}</span>
                 </span>
                 {repo.forked_from && (
-                  <GitFork
-                    size={12}
-                    aria-label="fork"
-                    className="shrink-0 translate-y-px text-muted"
-                  />
+                  <GitFork size={12} aria-label="fork" className="shrink-0 translate-y-px text-subtle" />
                 )}
               </span>
-
-              <p className="m-0 line-clamp-2 min-h-[2.4em] text-[12.5px] leading-snug text-muted">
-                {repo.description ?? <span className="italic">No description</span>}
-              </p>
-
-              <span className="mt-auto flex items-center gap-3 pt-1 text-[11.5px] text-muted">
-                <span className="font-mono">{repo.default_branch}</span>
+              <span className="row-span-2 flex items-center gap-4 self-center font-mono text-[12px] text-subtle tabular whitespace-nowrap">
                 {repo.star_count > 0 && (
-                  <span className="inline-flex items-center gap-1 tabular">
+                  <span className="inline-flex items-center gap-1">
                     <Star size={11} aria-hidden="true" />
                     {repo.star_count}
                   </span>
                 )}
-                <span className="ml-auto tabular whitespace-nowrap">
-                  {timeAgo(repo.updated_at)}
-                </span>
+                <span className="max-sm:hidden">{repo.default_branch}</span>
+                <span className="w-[56px] text-right">{timeAgo(repo.updated_at)}</span>
+              </span>
+              <span className="min-w-0 truncate text-[13.5px] text-muted">
+                {repo.description ?? <span className="text-subtle">No description</span>}
               </span>
             </Link>
-          </MagicCard>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <Link
         to="/repos"
-        className="mt-4 inline-flex items-center gap-1.5 text-[13px] text-accent hover:underline"
+        className="mt-4 inline-flex items-center gap-1.5 text-[13.5px] text-foreground underline decoration-[var(--rule-2)] underline-offset-4 hover:decoration-current"
       >
         Browse all{totalCount ? ` ${totalCount.toLocaleString()}` : ''} repositories
         <span aria-hidden="true">→</span>

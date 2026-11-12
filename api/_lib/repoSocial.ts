@@ -48,7 +48,7 @@ export interface RepoSocialModel {
   canonicalPath: string;
 }
 
-const SITE_NAME = 'gitlawb explorer';
+const SITE_NAME = 'Twigpine Explorer';
 const DEFAULT_TEXT_LIMIT = 240;
 const OWNER_LIMIT = 256;
 const NAME_LIMIT = 96;

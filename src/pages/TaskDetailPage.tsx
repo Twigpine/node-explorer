@@ -1,4 +1,3 @@
-import { Circle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cn } from '../lib/utils';
@@ -11,8 +10,8 @@ import { CopyButton } from '../components/ui/CopyButton';
 import { Skeleton } from '../components/ui/Skeleton';
 function PageBreadcrumb({ id }: { id: string }) {
   return (
-    <nav aria-label="breadcrumb" className="mb-8 sm:mb-10">
-      <ol className="flex items-center gap-1.5 sm:gap-2 text-[12.5px] flex-nowrap min-w-0 text-muted">
+    <nav aria-label="breadcrumb" className="mb-6">
+      <ol className="m-0 flex list-none items-center gap-1.5 p-0 font-mono text-[12.5px] flex-nowrap min-w-0 text-subtle">
         <li className="shrink-0 inline-flex items-center gap-1.5">
           <Link
             to="/tasks"
@@ -22,9 +21,9 @@ function PageBreadcrumb({ id }: { id: string }) {
             tasks
           </Link>
         </li>
-        <li role="presentation" aria-hidden="true" className="text-muted shrink-0">/</li>
+        <li role="presentation" aria-hidden="true" className="shrink-0">/</li>
         <li className="min-w-0 inline-flex items-center gap-1.5">
-          <span className="text-foreground font-bold truncate block">{id.slice(0, 8)}</span>
+          <span className="text-foreground truncate block">{id.slice(0, 8)}</span>
         </li>
       </ol>
     </nav>
@@ -35,7 +34,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return (
     <div className="flex flex-col gap-1.5 min-w-0">
       <MicroLabel>{label}</MicroLabel>
-      <div className="text-[13px] text-foreground min-w-0">{children}</div>
+      <div className="font-mono text-[13px] text-foreground min-w-0">{children}</div>
     </div>
   );
 }
@@ -46,12 +45,12 @@ function DidField({ label, did }: { label: string; did: string }) {
       <span className="flex items-center gap-2 min-w-0">
         <Link
           to={`/agents?q=${encodeURIComponent(didKeySegment(did))}`}
-          className="truncate hover:text-accent transition-colors"
+          className="truncate hover:underline"
           title={did}
         >
           {truncateDid(did)}
         </Link>
-        <CopyButton value={did} label="did" />
+        <CopyButton value={did} label="Copy" srLabel="Copy the DID" />
       </span>
     </Field>
   );
@@ -60,11 +59,11 @@ function DidField({ label, did }: { label: string; did: string }) {
 function JsonPanel({ label, raw }: { label: string; raw: string }) {
   return (
     <section className="border-t border-border pt-4 min-w-0">
-      <div className="flex items-center justify-between gap-3 px-4 sm:px-6 h-10 border-b border-border bg-surface">
+      <div className="flex items-center justify-between gap-3 h-10">
         <MicroLabel>{label}</MicroLabel>
         <CopyButton value={raw} label={label} />
       </div>
-      <pre className="m-0 px-4 sm:px-6 py-4 text-[12px] leading-[1.7] text-muted overflow-x-auto whitespace-pre-wrap break-words">
+      <pre className="m-0 bg-canvas-inset p-4 font-mono text-[12.5px] leading-[1.65] text-foreground overflow-x-auto whitespace-pre-wrap break-words">
         {prettyJson(raw)}
       </pre>
     </section>
@@ -102,32 +101,31 @@ export default function TaskDetailPage() {
     return (
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <PageBreadcrumb id={id} />
-        <div className="flex flex-col items-center justify-center py-24 sm:py-32 text-center border-t border-border">
-          <h1 className="m-0 mb-3 text-[20px] font-semibold">
+        <div className="border-t border-border py-16">
+          <h1 className="m-0 mb-2 text-[28px] font-[540] tracking-[-0.03em]">
             {error === 'not_found' ? 'Task not found' : 'Failed to load task'}
           </h1>
-          <p className="m-0 mb-6 text-[13px] text-muted">
+          <p className="m-0 mb-6 text-[15px] text-muted">
             {error === 'not_found'
-              ? `no task with id ${id} exists on this node`
-              : 'the node did not answer — try again'}
+              ? `No task with id ${id} exists on this node.`
+              : 'The node did not answer. Try again.'}
           </p>
-          <Pill to="/tasks">← back to tasks</Pill>
+          <Pill to="/tasks" className="rounded-[var(--radius-control)] px-2.5 py-1 text-[13px]">← Back to tasks</Pill>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <PageBreadcrumb id={id} />
 
       {/* Header */}
-      <section className="border-t border-border pt-4 mb-6">
-        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 h-12 border-b border-border">
+      <section className="mb-8">
+        <div className="mb-3 flex items-center gap-3">
           <MicroLabel>agent task</MicroLabel>
           {task && (
-            <span className={cn('text-[11px] flex items-center gap-1.5', taskStatusColor(task.status))}>
-              <Circle size={7} fill="currentColor" aria-hidden="true" />
+            <span className={cn('inline-block text-[12.5px] first-letter:uppercase', taskStatusColor(task.status))}>
               {task.status}
             </span>
           )}
@@ -140,14 +138,14 @@ export default function TaskDetailPage() {
             </>
           ) : (
             <>
-              <h1 className="m-0 text-[24px] sm:text-[32px] font-extrabold leading-tight tracking-tight text-foreground mb-3 break-words">
+              <h1 className="m-0 text-[26px] sm:text-[34px] font-[540] leading-[1.1] tracking-[-0.03em] text-foreground mb-3 break-words">
                 {taskTitle(task)}
               </h1>
               <div className="flex items-center gap-2 flex-wrap text-[12px] text-muted">
-                <Pill>{task.kind}</Pill>
-                {task.capability && <Pill>{task.capability}</Pill>}
-                <span className="text-muted">id {task.id}</span>
-                <CopyButton value={task.id} label="id" />
+                <Pill className="font-mono">{task.kind}</Pill>
+                {task.capability && <Pill className="font-mono">{task.capability}</Pill>}
+                <span className="font-mono text-subtle">{task.id}</span>
+                <CopyButton value={task.id} label="Copy" srLabel="Copy the task id" />
               </div>
             </>
           )}
@@ -158,12 +156,12 @@ export default function TaskDetailPage() {
         <>
           {/* Facts grid */}
           <section className="border-t border-border pt-4 mb-6">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 px-4 sm:px-6 py-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 py-4">
               <DidField label="delegator" did={task.delegator_did} />
               {task.assignee_did ? (
                 <DidField label="assignee" did={task.assignee_did} />
               ) : (
-                <Field label="assignee"><span className="text-muted">unclaimed</span></Field>
+                <Field label="assignee"><span className="font-sans text-subtle">Unclaimed</span></Field>
               )}
               <Field label="created">
                 <span title={task.created_at}>{formatDate(task.created_at)} · {timeAgo(task.created_at)}</span>
@@ -172,7 +170,7 @@ export default function TaskDetailPage() {
                 <span title={task.updated_at}>{formatDate(task.updated_at)} · {timeAgo(task.updated_at)}</span>
               </Field>
               <Field label="deadline">
-                {task.deadline ? <span title={task.deadline}>{formatDate(task.deadline)}</span> : <span className="text-muted">none</span>}
+                {task.deadline ? <span title={task.deadline}>{formatDate(task.deadline)}</span> : <span className="font-sans text-subtle">None</span>}
               </Field>
               <Field label="repo">
                 {task.repo_id ? <span className="break-all">{task.repo_id}</span> : <span className="text-muted">—</span>}
@@ -185,7 +183,7 @@ export default function TaskDetailPage() {
             {task.payload && <JsonPanel label="payload" raw={task.payload} />}
             {task.result && <JsonPanel label="result" raw={task.result} />}
             {!task.payload && !task.result && (
-              <p className="m-0 text-[13px] text-muted">this task carries no payload or result data</p>
+              <p className="m-0 text-[14px] text-muted">This task carries no payload or result data.</p>
             )}
           </div>
         </>

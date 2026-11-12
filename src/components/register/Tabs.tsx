@@ -143,7 +143,7 @@ function Tab({
       className={cn(
         'relative inline-flex items-baseline gap-1.5 whitespace-nowrap px-3 py-2',
         'text-[14px] transition-colors',
-        active ? 'text-foreground' : 'text-muted hover:text-foreground',
+        active ? 'font-medium text-foreground' : 'text-subtle hover:text-foreground',
         className,
       )}
     >
@@ -151,7 +151,7 @@ function Tab({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute left-2 right-2 -bottom-px h-[2px] bg-accent transition-opacity',
+          'absolute inset-x-0 -bottom-px h-px bg-foreground transition-opacity',
           active ? 'opacity-100' : 'opacity-0',
         )}
       />

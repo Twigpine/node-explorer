@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { buildRepoSocialModel, type RepoSocialInput } from '../../api/_lib/repoSocial.js';
 import type { Repository } from '../types/repo';
 
-const SITE_NAME = 'gitlawb explorer';
+const SITE_NAME = 'Twigpine Explorer';
 const SITE_DESCRIPTION = 'Browse live repositories on the gitlawb network — clone over gitlawb://, inspect ownership, and verify push certificates.';
 
 interface PageMetadata {
@@ -70,7 +70,7 @@ function genericMetadata(origin: string): PageMetadata {
     description: SITE_DESCRIPTION,
     canonicalUrl: origin,
     imageUrl: `${origin}/og.png`,
-    imageAlt: 'gitlawb explorer — a terminal-style browser for live repositories on the gitlawb network',
+    imageAlt: 'Twigpine Explorer, a browser for live repositories on the Twigpine network',
     robots: 'index,follow',
   };
 }

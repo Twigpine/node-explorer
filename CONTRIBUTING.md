@@ -1,4 +1,4 @@
-# Contributing to gitlawb node explorer
+# Contributing to Twigpine Explorer
 
 Thanks for your interest in contributing! This document covers how to get set up,
 the conventions the codebase follows, and what to expect from the review process.

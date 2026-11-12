@@ -3,34 +3,48 @@ import { useState, useEffect } from 'react';
 type Theme = 'dark' | 'light';
 
 /**
- * The stored preference is versioned.
+ * A stored choice wins; with none, the theme follows the OS. The inline script
+ * in index.html makes the same decision before first paint and stamps it on
+ * <html>, so this reads that back instead of deciding a second time.
  *
- * The previous design defaulted to dark and persisted `theme: "dark"` for every
- * visitor. This design is printed on light stock, with dark as the counterfoil.
- * Reading the old key would hand every returning visitor the counterfoil and
- * hide the redesign from exactly the people who had seen the old one — so the
- * legacy value is deliberately not inherited. A visitor who wants dark picks it
- * again once, and that choice is stored under the new key.
+ * The choice is only written to storage when the reader picks one, so a
+ * visitor who never touches the toggle keeps following their OS.
+ *
+ * The key is new on purpose. The previous hook wrote `gl-theme` on every
+ * visit, defaulting to "light", so a stored value under that name does not
+ * mean anyone chose it. Reading it would pin every returning visitor to light
+ * whatever their OS says. The old key is ignored and left alone.
  */
-const KEY = 'gl-theme';
+const KEY = 'twigpine-theme';
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem(KEY) as Theme | null;
   if (stored === 'dark' || stored === 'light') return stored;
-  return 'light';
+  const stamped = document.documentElement.getAttribute('data-theme');
+  if (stamped === 'dark' || stamped === 'light') return stamped;
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+
+  const setTheme = (next: Theme | ((t: Theme) => Theme)) => {
+    setThemeState(prev => {
+      const value = typeof next === 'function' ? next(prev) : next;
+      try {
+        localStorage.setItem(KEY, value);
+      } catch {
+        /* private mode: the choice lasts for this page only */
+      }
+      return value;
+    });
+  };
 
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle('dark', theme === 'dark');
     root.setAttribute('data-theme', theme);
-    localStorage.setItem(KEY, theme);
-    // Retire the pre-redesign key so it cannot resurface later.
-    localStorage.removeItem('theme');
 
     // Force a full style recalculation.
     //

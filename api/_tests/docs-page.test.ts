@@ -87,7 +87,7 @@ describe('docs page HTML shell', () => {
     );
     expect(response.headers.get('vary')).toBe('Accept, User-Agent');
     expect(staticFetch).toHaveBeenCalledTimes(1);
-    expect(html).toContain('<title>for AI agents · docs · gitlawb explorer</title>');
+    expect(html).toContain('<title>for AI agents · docs · Twigpine Explorer</title>');
     expect(html).toContain('content="https://preview.example/og-docs.png"');
     expect(html).toContain('href="https://preview.example/docs/agents"');
     expect(html).not.toContain('old metadata');
@@ -102,7 +102,7 @@ describe('docs page HTML shell', () => {
     const html = await response.text();
 
     expect(response.status).toBe(200);
-    expect(html).toContain('<title>docs · gitlawb explorer</title>');
+    expect(html).toContain('<title>docs · Twigpine Explorer</title>');
     expect(html).toContain('href="https://preview.example/docs"');
     expect(html).toContain('content="https://preview.example/og-docs.png"');
   });
@@ -114,7 +114,7 @@ describe('docs page HTML shell', () => {
     const html = await response.text();
 
     expect(response.status).toBe(200);
-    expect(html).toContain('<title>docs · gitlawb explorer</title>');
+    expect(html).toContain('<title>docs · Twigpine Explorer</title>');
     expect(html).toContain('href="https://preview.example/docs"');
     expect(html).not.toContain('<script>alert(1)</script>');
   });
@@ -141,7 +141,7 @@ describe('docs page HTML shell', () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toContain('text/html');
-    expect(html).toContain('<title>for AI agents · docs · gitlawb explorer</title>');
+    expect(html).toContain('<title>for AI agents · docs · Twigpine Explorer</title>');
     expect(html).toContain('<div id="root"></div>');
   });
 
@@ -181,7 +181,7 @@ describe('docs page markdown negotiation', () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('text/markdown; charset=utf-8');
-    expect(body).toContain('# gitlawb docs');
+    expect(body).toContain('# Twigpine docs');
     expect(body).toContain('https://preview.example/docs/quickstart.md');
     expect(body).toContain('https://preview.example/docs/agents.md');
     expect(body).toContain('https://preview.example/skill.md');
@@ -196,7 +196,7 @@ describe('docs page markdown negotiation', () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
-    expect(body).toContain('# gitlawb docs');
+    expect(body).toContain('# Twigpine docs');
     expect(body).not.toContain('nope');
   });
 
@@ -221,7 +221,7 @@ describe('docs page markdown negotiation', () => {
     const response = await GET(docsRequest('protocol', { accept: '*/*' }));
     const body = await response.text();
 
-    expect(body).not.toContain('# gitlawb docs');
+    expect(body).not.toContain('# Twigpine docs');
     expect(body).not.toContain('All guides are served as raw markdown');
     expect(response.status).toBe(404);
   });
@@ -255,7 +255,7 @@ describe('docs page markdown negotiation', () => {
     );
 
     expect(response.status).toBe(404);
-    expect(await response.text()).not.toContain('# gitlawb docs');
+    expect(await response.text()).not.toContain('# Twigpine docs');
   });
 
   it('rejects an HTML shell served in place of a document', async () => {

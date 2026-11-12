@@ -87,7 +87,7 @@ export function Modal({ open, onClose, label, children, className, size = 'md' }
       {open && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 sm:p-8">
           <motion.div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-background/80"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -105,7 +105,7 @@ export function Modal({ open, onClose, label, children, className, size = 'md' }
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
             transition={{ duration: reduce ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full mt-[8vh] border border-border rounded-[var(--radius)] bg-surface outline-none',
+              'relative w-full mt-[8vh] border border-foreground bg-surface outline-none',
               'max-h-[76vh] overflow-y-auto',
               WIDTH[size],
               className,

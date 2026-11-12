@@ -3,7 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { Menu, X, Search } from 'lucide-react';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import { Logo } from '../ui/Logo';
+import { Lockup } from '../brand/Mark';
+import { LiveDot } from '../brand/Chrome';
+import { Kbd } from '../register/controls';
 import { useNodeStatus } from '../../hooks/useNodeStatus';
 import { useShortcuts } from '../../hooks/useShortcuts';
 import { cn } from '../../lib/utils';
@@ -11,14 +13,14 @@ import { MobileNavDrawer } from './MobileNavDrawer';
 import { modifierKeyLabel } from '../../lib/platform';
 
 const NAV_LINKS = [
-  { to: '/', label: 'overview', end: true },
-  { to: '/repos', label: 'repos' },
-  { to: '/network', label: 'network' },
-  { to: '/peers', label: 'peers' },
-  { to: '/events', label: 'events' },
-  { to: '/tasks', label: 'tasks' },
-  { to: '/agents', label: 'agents' },
-  { to: '/docs', label: 'docs' },
+  { to: '/', label: 'Overview', end: true },
+  { to: '/repos', label: 'Repos' },
+  { to: '/network', label: 'Network' },
+  { to: '/peers', label: 'Peers' },
+  { to: '/events', label: 'Events' },
+  { to: '/tasks', label: 'Tasks' },
+  { to: '/agents', label: 'Agents' },
+  { to: '/docs', label: 'Docs' },
 ];
 
 export default function TopBar() {
@@ -56,11 +58,8 @@ export default function TopBar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto flex h-14 max-w-[1280px] items-center gap-2 sm:gap-6 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <Logo className="h-[18px] w-auto shrink-0 text-foreground" />
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">
-            gitlawb
-          </span>
+        <Link to="/" aria-label="Twigpine Explorer, overview" className="flex shrink-0 items-center">
+          <Lockup />
         </Link>
 
         {/* One indicator shared across every item: Motion animates it between
@@ -79,15 +78,15 @@ export default function TopBar() {
                 aria-current={active ? 'page' : undefined}
                 onMouseEnter={() => setHovered(to)}
                 className={cn(
-                  'relative px-3 py-2 text-[13.5px] transition-colors whitespace-nowrap',
-                  active ? 'text-foreground' : 'text-muted hover:text-foreground',
+                  'relative px-2.5 py-2 text-[14px] transition-colors whitespace-nowrap',
+                  active ? 'font-medium text-foreground' : 'text-subtle hover:text-foreground',
                 )}
               >
                 {railOn === to && (
                   <motion.span
                     layoutId="nav-rail"
                     aria-hidden="true"
-                    className="absolute inset-x-1 -bottom-px h-px bg-foreground"
+                    className="absolute inset-x-2.5 -bottom-[9px] h-px bg-foreground"
                     transition={
                       reduce
                         ? { duration: 0 }
@@ -104,16 +103,22 @@ export default function TopBar() {
         <div className="flex-1" />
 
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-          {stats && (
-            <span className="hidden xl:inline text-[12.5px] tabular text-muted whitespace-nowrap">
-              {stats.repos.toLocaleString()} repos
-              <span className="px-1.5 text-subtle">·</span>
-              {stats.agents.toLocaleString()} agents
-            </span>
-          )}
-          {node?.network && (
-            <span className="max-md:hidden text-[12px] text-muted">{node.network}</span>
-          )}
+          {/* The node this page is reading, and whether it answered. The dot
+              is the needle only while the node is answering. */}
+          <span
+            className="hidden lg:inline-flex items-center gap-2 font-mono text-[12px] text-subtle whitespace-nowrap"
+            title={node ? 'The node answered its last status check' : 'Waiting for the node'}
+          >
+            <LiveDot on={!!node} />
+            {node ? (
+              <>
+                node {node.version ? `v${node.version}` : 'online'}
+                {node.network && <span>· {node.network}</span>}
+              </>
+            ) : (
+              'node …'
+            )}
+          </span>
 
           {/* Icon only. The shortcut lives in the tooltip and the accessible
               name rather than as a floating glyph beside the icon — and it
@@ -124,10 +129,13 @@ export default function TopBar() {
             title={`Search — ${paletteHint}`}
             aria-label={`Open command palette (${paletteHint})`}
             aria-keyshortcuts="Meta+K Control+K"
-            className="inline-flex h-10 w-10 sm:h-8 sm:w-8 items-center justify-center
-              text-muted transition-colors hover:text-foreground"
+            className="inline-flex h-10 sm:h-8 items-center justify-center gap-2 px-2 sm:px-2.5
+              rounded-[var(--radius-control)] sm:border sm:border-border
+              text-[13px] text-subtle transition-colors hover:text-foreground hover:border-foreground"
           >
-            <Search size={17} />
+            <Search size={15} />
+            <span className="hidden sm:inline">Search</span>
+            <Kbd className="hidden sm:inline-flex border-0 px-0">{paletteHint}</Kbd>
           </button>
 
           <ThemeToggle />

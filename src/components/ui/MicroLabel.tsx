@@ -10,6 +10,6 @@ import { cn } from '../../lib/utils';
  */
 export function MicroLabel({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span className={cn('text-[12px] font-medium text-muted', className)}>{children}</span>
+    <span className={cn('inline-block text-[12.5px] text-subtle first-letter:uppercase', className)}>{children}</span>
   );
 }

@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { CopyButton } from '../ui/CopyButton';
 import { truncateDid } from '../../lib/api';
 import { useNodeStatus } from '../../hooks/useNodeStatus';
+import { Mark } from '../brand/Mark';
 
-const linkCls = 'text-[13px] text-muted hover:text-accent transition-colors';
+const linkCls = 'text-[13.5px] text-muted hover:text-foreground transition-colors';
 
 export default function Footer() {
   const { node, stats } = useNodeStatus();
@@ -15,8 +16,15 @@ export default function Footer() {
         <div className="flex flex-wrap items-start justify-between gap-x-10 gap-y-6">
 
           <div className="min-w-0">
-            <p className="m-0 text-[14px] font-semibold text-foreground">gitlawb explorer</p>
-            <p className="m-0 mt-1 text-[13px] text-muted">
+            <p className="m-0 flex items-center gap-2 text-[14px] text-foreground">
+              <Mark size={18} />
+              <span>
+                <span className="font-[540]">Explorer</span>{' '}
+                <span className="text-subtle">by Twigpine</span>
+              </span>
+            </p>
+            <p className="m-0 mt-2 font-mono text-[12px] text-subtle">
+              node{' '}
               {version && <>v{version}</>}
               {node?.network && (
                 <>
@@ -33,14 +41,14 @@ export default function Footer() {
                 >
                   {truncateDid(node.did)}
                 </code>
-                <CopyButton value={node.did} label="did" />
+                <CopyButton value={node.did} label="Copy" srLabel="Copy the node DID" />
               </span>
             )}
           </div>
 
           <nav className="flex flex-wrap gap-x-12 gap-y-6">
             <div>
-              <h2 className="m-0 mb-2 text-[13px] font-semibold text-foreground">Docs</h2>
+              <h2 className="m-0 mb-2 text-[13px] font-normal text-subtle">Docs</h2>
               <ul className="m-0 p-0 list-none flex flex-col gap-1.5">
                 <li><Link to="/docs/quickstart" className={linkCls}>Quickstart</Link></li>
                 <li><Link to="/docs/protocol" className={linkCls}>Protocol</Link></li>
@@ -51,7 +59,7 @@ export default function Footer() {
 
             <div>
               {/* Agents and CLIs read this site as text; say where. */}
-              <h2 className="m-0 mb-2 text-[13px] font-semibold text-foreground">Machine readable</h2>
+              <h2 className="m-0 mb-2 text-[13px] font-normal text-subtle">Machine readable</h2>
               <ul className="m-0 p-0 list-none flex flex-col gap-1.5">
                 <li><a href="/llms.txt" className={linkCls}>llms.txt</a></li>
                 <li><a href="/skill.md" className={linkCls}>skill.md</a></li>
@@ -70,8 +78,8 @@ export default function Footer() {
           </nav>
         </div>
 
-        <p className="m-0 mt-8 pt-4 border-t border-separator text-[12px] text-muted">
-          The explorer holds no data of its own — every figure here is read live from the node and
+        <p className="m-0 mt-8 pt-4 border-t border-separator text-[12.5px] text-subtle">
+          The explorer holds no data of its own. Every figure here is read live from the node and
           can be checked against its API.
         </p>
       </div>

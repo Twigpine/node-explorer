@@ -1,6 +1,6 @@
-# Running a gitlawb node
+# Running a Twigpine node
 
-Step-by-step guide to registering and operating a gitlawb node. The reference node implementation lives at [Twigpine/node](https://github.com/Twigpine/node).
+Step-by-step guide to registering and operating a Twigpine node. The reference node implementation lives at [Twigpine/node](https://github.com/Twigpine/node).
 
 Running a node requires no token. Write-node access lock is not live on Base yet. The live network does not require a lock today.
 

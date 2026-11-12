@@ -10,20 +10,18 @@ import type {
 import { cn } from '../../lib/utils';
 
 /**
- * Controls.
+ * Controls, in Canopy.
  *
- * Rules and list hairlines are drawn square; controls are not. A control at
- * zero radius reads as a hard box, and a listing page puts many of them side by
- * side, so they take `--radius-control` — a full round, matching the search
- * field. Buttons stay frameless by default, and a border or a fill is reserved
- * for the rare control that must stand apart.
+ * Square, with a 2px radius on buttons and inputs only. Buttons stay
+ * frameless by default; a frame is reserved for `outline` and a fill for the
+ * one primary action on a view. Hover is full ink, never a colour.
  *
  * `onPress` / `isDisabled` are accepted alongside `onClick` / `disabled` so
  * call sites migrating off the old kit keep working.
  */
 
 const focus =
-  'focus:outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[-1px]';
+  'focus:outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2';
 
 /* ── Input ────────────────────────────────────────────────────────────── */
 export interface InputProps
@@ -37,9 +35,9 @@ export function Input({ className, variant: _variant, ...rest }: InputProps) {
     <input
       {...rest}
       className={cn(
-        'w-full h-9 px-0 text-[14px] bg-transparent text-foreground',
-        'placeholder:text-muted border-0 border-b border-border',
-        'transition-colors focus:border-foreground focus:outline-none',
+        'w-full h-9 px-3 text-[14px] bg-transparent text-foreground',
+        'placeholder:text-subtle border border-faint rounded-[var(--radius-control)]',
+        'transition-colors hover:border-muted focus:border-foreground focus:outline-none',
         className,
       )}
     />
@@ -80,10 +78,10 @@ export function Button({
   // that lifts on hover. A frame is reserved for `outline`, and a fill for the
   // one primary action on a view.
   const tones: Record<string, string> = {
-    primary: 'bg-foreground text-background font-medium hover:opacity-90',
+    primary: 'bg-foreground text-background font-medium hover:bg-muted',
     secondary: 'text-muted hover:text-foreground hover:bg-surface-secondary',
     tertiary: 'text-muted hover:text-foreground',
-    outline: 'text-foreground border border-border hover:border-foreground/40',
+    outline: 'text-foreground border border-faint hover:border-foreground',
     danger: 'text-danger hover:bg-danger hover:text-background',
   };
 
@@ -98,9 +96,6 @@ export function Button({
       }}
       className={cn(
         'inline-flex items-center justify-center gap-1.5 whitespace-nowrap',
-        // Controls are fully round, matching the search field and the filter
-        // track. At zero radius a control reads as a hard box, and this page
-        // puts a lot of them next to each other.
         'rounded-[var(--radius-control)] transition-colors',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         focus,
@@ -131,7 +126,7 @@ export function Kbd({ children, className }: { children: ReactNode; className?: 
     <kbd
       className={cn(
         'inline-flex items-center justify-center min-w-[20px] h-[20px] px-1.5',
-        'rounded-[var(--radius-sm)] bg-surface-secondary font-mono text-[11px] text-muted',
+        'border border-border font-mono text-[11px] leading-none text-muted',
         className,
       )}
     >
@@ -149,7 +144,7 @@ export function Skeleton({ className }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
-      className={cn('block rounded-[var(--radius-sm)] bg-surface-secondary animate-pulse', className)}
+      className={cn('block bg-surface-secondary animate-pulse', className)}
     />
   );
 }
@@ -213,7 +208,7 @@ Table.Column = function Column({ children, className, ...rest }: ThHTMLAttribute
       {...rest}
       scope="col"
       className={cn(
-        'px-4 py-2 text-[12px] font-semibold text-muted whitespace-nowrap align-bottom',
+        'px-4 py-2 text-[12.5px] font-normal text-subtle whitespace-nowrap align-bottom',
         className,
       )}
     >

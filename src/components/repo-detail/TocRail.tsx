@@ -49,11 +49,10 @@ export function TocRail({ headings }: TocRailProps) {
             <a
               href={`#${h.id}`}
               className={cn(
-                'block text-[11.5px] leading-snug truncate transition-colors',
-                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+                'block text-[12.5px] leading-snug truncate transition-colors',
                 activeId === h.id
-                  ? 'text-accent'
-                  : 'text-muted hover:text-foreground',
+                  ? 'font-medium text-foreground'
+                  : 'text-subtle hover:text-foreground',
               )}
             >
               {h.text}

@@ -6,16 +6,15 @@ import { DocsPager } from '../components/docs/DocsPager';
 import { AgentTextPanel } from '../components/docs/AgentTextPanel';
 import { TocRail } from '../components/repo-detail/TocRail';
 import { Skeleton } from '../components/register/controls';
-import { ScrollProgress } from '../components/ui/scroll-progress';
 import { extractTocHeadings } from '../lib/toc';
 import { cn } from '../lib/utils';
 
 /** Docs are static markdown served from public/docs/ — same files agents fetch raw. */
 const DOCS = [
   { slug: 'quickstart', label: 'Quickstart', title: 'Quickstart', blurb: 'Install gl and make your first signed push' },
-  { slug: 'agents', label: 'For agents', title: 'For AI agents', blurb: 'End-to-end instructions for operating on gitlawb' },
+  { slug: 'agents', label: 'For agents', title: 'For AI agents', blurb: 'End-to-end instructions for operating on Twigpine' },
   { slug: 'protocol', label: 'Protocol', title: 'Protocol', blurb: 'Identity, storage, networking, and ref consensus' },
-  { slug: 'node', label: 'Run a node', title: 'Run a node', blurb: 'Register and operate a gitlawb node' },
+  { slug: 'node', label: 'Run a node', title: 'Run a node', blurb: 'Register and operate a Twigpine node' },
 ] as const;
 
 type DocSlug = (typeof DOCS)[number]['slug'];
@@ -63,7 +62,7 @@ export default function DocsPage() {
     const doc = DOCS.find(d => d.slug === slug);
     if (!doc) return;
     const previous = document.title;
-    document.title = `${doc.label} · docs · gitlawb explorer`;
+    document.title = `${doc.label} · Docs · Twigpine Explorer`;
     return () => {
       document.title = previous;
     };
@@ -103,7 +102,7 @@ export default function DocsPage() {
   useLayoutEffect(() => {
     const nav = docNavRef.current;
     const active = nav?.querySelector<HTMLElement>('[aria-current="page"]') ??
-      nav?.querySelector<HTMLElement>('a[class*="bg-foreground"]');
+      nav?.querySelector<HTMLElement>('a[class*="font-medium"]');
     if (!nav || !active) return;
     const navBox = nav.getBoundingClientRect();
     const box = active.getBoundingClientRect();
@@ -122,19 +121,17 @@ export default function DocsPage() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6 lg:px-8">
-      <ScrollProgress />
-
       <div className="flex flex-col gap-8 pt-8 lg:flex-row lg:gap-12">
 
         {/* Section nav. Sticky on wide screens so the set of documents stays
             in view while reading a long one. */}
         <aside className="shrink-0 lg:w-[215px]">
           <div className="lg:sticky lg:top-20">
-            <p className="m-0 mb-3 text-[11.5px] text-muted">Documentation</p>
+            <p className="m-0 mb-3 text-[12.5px] text-subtle">Documentation</p>
             <nav
               ref={docNavRef}
               aria-label="documentation"
-              className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
+              className="flex overflow-x-auto lg:flex-col lg:overflow-visible"
             >
               {DOCS.map(d => (
                 <NavLink
@@ -142,11 +139,13 @@ export default function DocsPage() {
                   to={`/docs/${d.slug}`}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center whitespace-nowrap rounded-[var(--radius-control)] px-3.5 sm:px-3 text-[13.5px] transition-colors',
-                      'h-10 sm:h-auto sm:py-1.5',
+                      // A rule marks the current document: under it on the
+                      // phone strip, beside it in the desktop column.
+                      'flex items-center whitespace-nowrap px-3 text-[14px] transition-colors',
+                      'h-10 border-b lg:h-auto lg:border-b-0 lg:border-l lg:py-1.5',
                       isActive
-                        ? 'bg-foreground font-medium text-background'
-                        : 'text-muted hover:bg-surface-secondary hover:text-foreground',
+                        ? 'border-foreground font-medium text-foreground'
+                        : 'border-separator text-subtle hover:text-foreground',
                     )
                   }
                 >
@@ -163,10 +162,10 @@ export default function DocsPage() {
 
         <main className="min-w-0 flex-1">
           <header className="mb-8">
-            <h1 className="m-0 text-[30px] font-semibold leading-tight text-foreground">
+            <h1 className="m-0 text-[34px] font-[540] leading-[1.1] tracking-[-0.03em] text-foreground">
               {doc.title}
             </h1>
-            <p className="m-0 mt-2 max-w-[68ch] text-[15px] text-muted">{doc.blurb}</p>
+            <p className="m-0 mt-2.5 max-w-[68ch] text-[17px] text-subtle">{doc.blurb}</p>
           </header>
 
           <article className="max-w-[72ch]">
@@ -175,7 +174,7 @@ export default function DocsPage() {
                 <p className="m-0 text-[14px] font-medium text-danger">{state.error}</p>
                 <p className="m-0 mt-2 text-[13px] text-muted">
                   The source file is still readable directly at{' '}
-                  <a href={`/docs/${slug}.md`} className="text-accent hover:underline">
+                  <a href={`/docs/${slug}.md`} className="text-foreground underline">
                     /docs/{slug}.md
                   </a>
                   .

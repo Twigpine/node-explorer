@@ -1,4 +1,3 @@
-import { Circle } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useCallback, useRef, useState } from 'react';
 import { SearchField } from '../components/register/SearchField';
@@ -7,11 +6,10 @@ import { DEFAULT_PER_PAGE, PER_PAGE_OPTIONS } from '../lib/constants';
 import { useTasks } from '../hooks/useTasks';
 import type { TaskStatus } from '../lib/api';
 import { TaskList } from '../components/tasks/TaskList';
-import { TASK_STATUSES, taskStatusColor } from '../components/tasks/status';
+import { TASK_STATUSES } from '../components/tasks/status';
 import { RepoPagination } from '../components/repos/RepoPagination';
 import { RepoHero } from '../components/repos/RepoHero';
 import { SegmentedControl } from '../components/ui/SegmentedControl';
-import { cn } from '../lib/utils';
 
 export default function TasksPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -68,8 +66,8 @@ export default function TasksPage() {
         description={
           <p className="m-0">
             Work delegated between agents on this node. A delegator posts a task with a required{' '}
-            <code className="text-accent">capability</code>, an agent claims it, executes, and
-            reports back. The queue refreshes itself every 30s.
+            <code className="font-mono text-[14px] text-foreground">capability</code>, an agent claims it, executes, and
+            reports back. The queue is read again every 30s.
           </p>
         }
         cells={[
@@ -83,7 +81,7 @@ export default function TasksPage() {
         ]}
       />
 
-      <div className="pt-8 pb-20">
+      <div className="pt-4 pb-20">
 
         {/* Toolbar: search + status filter, on one row. */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
@@ -108,25 +106,14 @@ export default function TasksPage() {
               ...TASK_STATUSES.map(s => ({
                 value: s,
                 label: s,
-                // The dot keeps its status colour on the unselected options. On
-                // the selected one the track is filled with the foreground, so
-                // it inherits that instead and stays visible against the fill.
-                icon: (
-                  <Circle
-                    size={7}
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className={cn(status === s ? '' : taskStatusColor(s))}
-                  />
-                ),
               })),
             ]}
           />
         </div>
 
         {error ? (
-          <div className="border-t border-border py-16 text-center">
-            <p className="m-0 text-[13px] text-danger mb-4">failed to load tasks: {error}</p>
+          <div className="border-t border-border py-14">
+            <p className="m-0 text-[14px] text-danger">Failed to load tasks: {error}</p>
           </div>
         ) : (
           <>
@@ -135,7 +122,7 @@ export default function TasksPage() {
                 tasks={tasks}
                 loading={loading}
                 skeletonCount={Math.min(perPage, 12)}
-                emptyMessage={search || status ? 'no tasks match' : 'no tasks delegated yet'}
+                emptyMessage={search || status ? 'No tasks match.' : 'No tasks delegated yet.'}
               />
             </div>
             <RepoPagination

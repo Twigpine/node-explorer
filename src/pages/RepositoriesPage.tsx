@@ -65,7 +65,7 @@ export default function RepositoriesPage() {
         windowEnd={windowEnd}
       />
 
-      <div className="pt-8 pb-20">
+      <div className="pt-4 pb-20">
 
         <RepoToolbar
           search={search}
@@ -82,16 +82,16 @@ export default function RepositoriesPage() {
         {/* Owner filter chip */}
         {owner && (
           <div className="flex items-center gap-2 mb-4">
-            <span className="micro-label">owner</span>
-            <Pill onClick={() => setParams({ owner: null, page: null })} aria-label={`clear owner filter ${owner}`}>
+            <span className="text-[12.5px] text-subtle">Owner</span>
+            <Pill onClick={() => setParams({ owner: null, page: null })} aria-label={`Clear owner filter ${owner}`}>
               {owner.length > 16 ? `${owner.slice(0, 16)}…` : owner} ✕
             </Pill>
           </div>
         )}
 
         {error ? (
-          <div className="border-t border-border py-16 text-center">
-            <p className="m-0 text-[13px] text-danger mb-4">failed to load repositories: {error}</p>
+          <div className="border-t border-border py-14">
+            <p className="m-0 text-[14px] text-danger">Failed to load repositories: {error}</p>
           </div>
         ) : (
           <>
@@ -102,10 +102,10 @@ export default function RepositoriesPage() {
                 skeletonCount={Math.min(perPage, 12)}
                 emptyMessage={
                   forkFilter !== 'all' && totalPages > 1
-                    ? `no ${forkFilter} on this page`
+                    ? `No ${forkFilter} on this page`
                     : search || forkFilter !== 'all'
-                      ? 'no repositories match'
-                      : 'no repositories yet'
+                      ? 'No repositories match'
+                      : 'No repositories yet'
                 }
               />
             </div>
