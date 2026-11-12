@@ -28,7 +28,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Geist:wght@400..700&display=swap" rel="stylesheet" />
     <!-- Anti-FOUC: set theme before first paint. A stored choice wins, then
          the OS preference. useTheme reads the result back, so the two agree.
-         The key must match KEY in src/hooks/useTheme.ts. -->
+         The key must match KEY in src/hooks/useTheme.ts.
+         This is the only inline script, and the Content-Security-Policy in
+         vercel.json allows it by its sha256 hash. Changing so much as its
+         whitespace changes the hash, and a script whose hash is not listed is
+         blocked without an error on the page. api/_tests/csp.test.ts fails
+         when the two disagree and prints the hash to put in vercel.json. -->
     <script>
       (function () {
         var stored = localStorage.getItem('twigpine-theme');

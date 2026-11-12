@@ -67,7 +67,7 @@ export default function Footer() {
                   <a
                     href="https://node.twigpine.com/api/v1/repos"
                     target="_blank"
-                    rel="noopener"
+                    rel="noopener noreferrer"
                     className={linkCls}
                   >
                     Node API

@@ -1,6 +1,10 @@
 // Federated node registry for the network page. The nodes serve no CORS
 // headers, so peer nodes are reached through per-node proxy prefixes — see
 // vite.config.ts (dev) and vercel.json (prod), which must list the same hosts.
+// Because every node is reached through a same-origin prefix, the
+// Content-Security-Policy in vercel.json allows `connect-src 'self'` only. A
+// node fetched directly by its own host, instead of through a prefix, would
+// work in dev (no policy there) and be blocked in production.
 import type { NodeInfo, NodeStats, ApiPeer, P2PInfo, ApiRefUpdate } from './api';
 
 export interface FederatedNode {

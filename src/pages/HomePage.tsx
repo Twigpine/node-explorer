@@ -10,6 +10,7 @@ import {
   shortSha,
   parseEventRepo,
   didKeySegment,
+  isHttpUrl,
 } from '../lib/api';
 import type { ApiRefUpdate } from '../lib/api';
 import { CopyButton } from '../components/ui/CopyButton';
@@ -348,13 +349,13 @@ export default function HomePage() {
                 <Link to="/docs/quickstart" className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current">
                   quickstart
                 </Link>
-                {cloneRepo && (
+                {cloneRepo && isHttpUrl(cloneRepo.clone_url) && (
                   <>
                     {' '}· or over{' '}
                     <a
                       href={cloneRepo.clone_url}
                       target="_blank"
-                      rel="noopener"
+                      rel="noopener noreferrer"
                       className="text-foreground underline decoration-[var(--rule-2)] hover:decoration-current"
                     >
                       https
