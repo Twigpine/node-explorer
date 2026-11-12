@@ -269,7 +269,7 @@ export interface BlobResult {
 /**
  * Fetch and classify a blob. The node guesses content-type from the file
  * extension, so classification relies on extension + NUL-byte sniffing only
- * (mirrors the gitlawb.com web implementation).
+ * (mirrors the twigpine.com web implementation).
  */
 export async function getBlob(
   owner: string,

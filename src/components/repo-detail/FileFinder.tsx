@@ -70,20 +70,20 @@ export function FileFinder({ repo, open, onClose, onOpenFile }: FileFinderProps)
   };
 
   return (
-    <Modal open={open} onClose={onClose} label="find file">
+    <Modal open={open} onClose={onClose} label="Find file">
       <Input
         autoFocus
         value={query}
         onChange={e => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="find file…"
-        aria-label="find file"
+        aria-label="Find file"
         autoComplete="off"
         spellCheck="false"
         variant="secondary"
-        className="w-full h-12 px-5 border-b border-border rounded-none shadow-none"
+        className="w-full h-12 px-5 border-0 border-b border-border rounded-none"
       />
-      <ul className="m-0 p-0 list-none max-h-[50vh] overflow-y-auto" role="listbox" aria-label="files">
+      <ul className="m-0 p-0 list-none max-h-[50vh] overflow-y-auto" role="listbox" aria-label="Files">
         {results.map((path, i) => {
           const [dir, base] = splitPath(path);
           return (
@@ -98,13 +98,13 @@ export function FileFinder({ repo, open, onClose, onOpenFile }: FileFinderProps)
                 )}
               >
                 <span className="text-muted">{dir}</span>
-                <span className={cn(i === sel && 'font-bold', 'text-foreground')}>{base}</span>
+                <span className={cn(i === sel && 'font-medium', 'text-foreground')}>{base}</span>
               </Button>
             </li>
           );
         })}
         {results.length === 0 && index.status === 'done' && (
-          <li className="px-5 py-6 text-center text-[12.5px] text-muted">no files match</li>
+          <li className="px-5 py-6 text-[13px] text-muted">No files match.</li>
         )}
       </ul>
       <div className="flex items-center justify-between px-5 h-9 border-t border-border text-[11px] text-muted">

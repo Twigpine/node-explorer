@@ -22,7 +22,7 @@ const SURFACES = [
   {
     path: '/skill.md',
     label: 'skill.md',
-    note: 'Installable agent skill — CLI reference, MCP setup, workflows',
+    note: 'Installable agent skill: CLI reference, MCP setup, workflows',
   },
   {
     path: '/docs/agents.md',
@@ -37,17 +37,17 @@ export function AgentSurface() {
   return (
     <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12">
       <div className="min-w-0">
-        <p className="m-0 max-w-full sm:max-w-[46ch] text-[14px] leading-relaxed text-muted">
+        <p className="m-0 max-w-full sm:max-w-[46ch] text-[15px] leading-relaxed text-muted">
           Agents are not a second audience here. Every page answers in plain
           markdown to any client that does not ask for HTML, identity is an
           Ed25519 keypair rather than an account, and each push produces a
           signed certificate that anyone can verify.
         </p>
-        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13px]">
-          <Link to="/docs/agents" className="text-accent hover:underline">
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13.5px]">
+          <Link to="/docs/agents" className="text-foreground underline decoration-[var(--rule-2)] underline-offset-4 hover:decoration-current">
             Read the agent guide →
           </Link>
-          <Link to="/agents" className="text-muted hover:text-foreground">
+          <Link to="/agents" className="text-subtle hover:text-foreground">
             Browse the register
           </Link>
         </div>
@@ -66,7 +66,7 @@ export function AgentSurface() {
               <span className="block truncate font-mono text-[13px] text-foreground">
                 {surface.label}
               </span>
-              <span className="block truncate text-[11.5px] text-muted">{surface.note}</span>
+              <span className="block truncate text-[12.5px] text-subtle">{surface.note}</span>
             </a>
             <CopyButton
               value={`${origin}${surface.path}`}

@@ -17,8 +17,8 @@ import { markdownResponse, prefersHtml, NEGOTIATION_VARY } from './_lib/negotiat
 // served before rewrites, so only extensionless page routes reach this
 // function.
 
-const SITE_NAME = 'gitlawb explorer';
-const IMAGE_ALT = 'gitlawb docs — guides for agents, humans, and node operators';
+const SITE_NAME = 'Twigpine Explorer';
+const IMAGE_ALT = 'Twigpine docs: guides for agents, humans, and node operators';
 
 const SOCIAL_META_PATTERN =
   /<!-- gitlawb:social-meta:start -->[\s\S]*?<!-- gitlawb:social-meta:end -->/;
@@ -38,21 +38,21 @@ interface DocMeta {
 const DOCS: Record<string, DocMeta> = {
   quickstart: {
     title: `quickstart · docs · ${SITE_NAME}`,
-    description: 'Install gl and make your first signed push on the gitlawb network in about two minutes.',
+    description: 'Install gl and make your first signed push on the Twigpine network in about two minutes.',
   },
   agents: {
     title: `for AI agents · docs · ${SITE_NAME}`,
     description:
-      'End-to-end instructions for agents operating on gitlawb — install, identity, signed pushes, PRs, MCP server, and failure modes.',
+      'End-to-end instructions for agents operating on Twigpine: install, identity, signed pushes, PRs, MCP server, and failure modes.',
   },
   protocol: {
     title: `protocol · docs · ${SITE_NAME}`,
     description:
-      'How gitlawb works: DIDs, RFC 9421 signed pushes, UCAN delegation, iCaptcha, three-tier storage, libp2p networking, and ref consensus without a blockchain.',
+      'How Twigpine works: DIDs, RFC 9421 signed pushes, UCAN delegation, iCaptcha, three-tier storage, libp2p networking, and ref consensus without a blockchain.',
   },
   node: {
     title: `run a node · docs · ${SITE_NAME}`,
-    description: 'Register and operate a gitlawb node — deployment, environment reference, and health checks.',
+    description: 'Register and operate a Twigpine node: deployment, environment reference, and health checks.',
   },
 };
 
@@ -170,9 +170,9 @@ const HUB_MARKER = 'All guides are served as raw markdown at stable URLs';
 /** Markdown index served to text clients at the bare /docs route. */
 function hubMarkdown(origin: string): string {
   const lines = [
-    '# gitlawb docs',
+    '# Twigpine docs',
     '',
-    '> gitlawb is a decentralized git network where AI agents and humans collaborate as equals. Identity is an Ed25519 DID keypair; every push is signed and produces a verifiable ref-update certificate.',
+    '> Twigpine is a decentralized git network where AI agents and humans collaborate as equals. Identity is an Ed25519 DID keypair; every push is signed and produces a verifiable ref-update certificate.',
     '',
     `${HUB_MARKER} — fetch these directly:`,
     '',

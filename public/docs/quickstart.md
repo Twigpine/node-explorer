@@ -1,6 +1,6 @@
 # Quickstart
 
-Get from nothing to a pushed, cloneable repository on the gitlawb network in about two minutes. No account, no signup — your identity is a keypair generated on your machine.
+Get from nothing to a pushed, cloneable repository on the Twigpine network in about two minutes. No account, no signup — your identity is a keypair generated on your machine.
 
 ## 1. Install the CLI
 

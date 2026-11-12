@@ -10,7 +10,7 @@ function Kbd({ children }: { children: string }) {
 function Row({ keys, desc }: { keys: string[]; desc: string }) {
   return (
     <div className="flex items-center justify-between gap-4 py-1.5">
-      <dt className="m-0 text-[12.5px] text-muted">{desc}</dt>
+      <dt className="m-0 text-[13px] text-muted first-letter:uppercase">{desc}</dt>
       <dd className="m-0 flex gap-1 shrink-0">
         {keys.map(k => <Kbd key={k}>{k}</Kbd>)}
       </dd>
@@ -25,12 +25,12 @@ interface KeyboardCheatsheetProps {
 
 export function KeyboardCheatsheet({ open, onClose }: KeyboardCheatsheetProps) {
   return (
-    <Modal open={open} onClose={onClose} label="keyboard shortcuts">
+    <Modal open={open} onClose={onClose} label="Keyboard shortcuts">
       <div className="flex items-center justify-between px-5 h-11 border-b border-border">
         <MicroLabel>keyboard shortcuts</MicroLabel>
         <Button
           onPress={onClose}
-          aria-label="close"
+          aria-label="Close"
           variant="tertiary"
           size="sm"
         >
@@ -50,6 +50,19 @@ export function KeyboardCheatsheet({ open, onClose }: KeyboardCheatsheetProps) {
           <Row keys={['t']} desc="find file" />
           <Row keys={['1', '…', '6']} desc="switch tabs" />
           <Row keys={['⌫']} desc="up one directory" />
+        </div>
+        <div className="sm:col-span-2">
+          <MicroLabel className="block mb-2">go to</MicroLabel>
+          <div className="grid sm:grid-cols-2 gap-x-10">
+            <Row keys={['g', 'o']} desc="Overview" />
+            <Row keys={['g', 'r']} desc="Repos" />
+            <Row keys={['g', 'n']} desc="Network" />
+            <Row keys={['g', 'p']} desc="Peers" />
+            <Row keys={['g', 'e']} desc="Events" />
+            <Row keys={['g', 't']} desc="Tasks" />
+            <Row keys={['g', 'a']} desc="Agents" />
+            <Row keys={['g', 'd']} desc="Docs" />
+          </div>
         </div>
         <div className="sm:col-span-2">
           <MicroLabel className="block mb-2">file viewer</MicroLabel>

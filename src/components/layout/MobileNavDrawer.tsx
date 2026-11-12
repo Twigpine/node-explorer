@@ -48,22 +48,22 @@ export function MobileNavDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange} autoFocus>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[60] bg-background/70 backdrop-blur-[2px]" />
+        <Drawer.Overlay className="fixed inset-0 z-[60] bg-background/85" />
         <Drawer.Content
           aria-label="Navigation"
           className={cn(
             'fixed inset-x-0 bottom-0 z-[70] mt-24 flex max-h-[88vh] flex-col',
-            'rounded-t-[var(--radius)] border-t border-border bg-background',
+            'border-t border-foreground bg-background',
             'outline-none',
           )}
         >
           {/* The grabber is the affordance for the drag Vaul provides; without
               it the sheet gives no sign it can be thrown shut. */}
-          <div aria-hidden="true" className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border" />
+          <div aria-hidden="true" className="mx-auto mt-3 h-px w-10 shrink-0 bg-foreground" />
 
           <div className="overflow-y-auto overscroll-contain px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4">
             <Drawer.Title className="m-0 px-1 text-[11.5px] text-muted">
-              {node?.name ?? 'gitlawb'}
+              {node?.name ?? 'Twigpine Explorer'}
               {node?.network && <span className="ml-1.5">· {node.network}</span>}
             </Drawer.Title>
 
@@ -77,8 +77,8 @@ export function MobileNavDrawer({
                         to={to}
                         aria-current={active ? 'page' : undefined}
                         className={cn(
-                          'flex h-12 items-center justify-between rounded-[var(--radius-sm)] px-3',
-                          'text-[15px] capitalize transition-colors',
+                          'flex h-12 items-center justify-between px-3',
+                          'text-[15px] transition-colors',
                           active
                             ? 'bg-surface-secondary font-medium text-foreground'
                             : 'text-muted active:bg-surface-secondary',

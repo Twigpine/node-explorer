@@ -1,5 +1,6 @@
-// Weekly commit counts (oldest → newest), drawn as an engraved trace above a
-// ruled baseline. Real measurement, not chrome: the value is in the aria-label
+// Weekly commit counts (oldest → newest), drawn as ink bars above a ruled
+// baseline. Ink only: the needle is never a chart bar. The current week is
+// full ink and earlier weeks are dimmer, which says "now" without a colour. Real measurement, not chrome: the value is in the aria-label
 // and the bar heights are the node's own commit dates, bucketed.
 //
 // Previous revisions filled these bars from `--color-warm` and
@@ -49,7 +50,7 @@ export function Sparkline({ data }: SparklineProps) {
         y1={BASELINE_Y + 0.5}
         x2={W}
         y2={BASELINE_Y + 0.5}
-        stroke="var(--color-border)"
+        stroke="var(--rule-2)"
         strokeWidth={1}
       />
       {!loading &&
@@ -64,8 +65,8 @@ export function Sparkline({ data }: SparklineProps) {
               y={BASELINE_Y - h}
               width={Math.max(0.75, slot - GAP)}
               height={h}
-              fill={current ? 'var(--color-success)' : 'var(--color-accent)'}
-              fillOpacity={current ? 1 : 0.55}
+              fill="var(--ink)"
+              fillOpacity={current ? 1 : 0.45}
             />
           );
         })}

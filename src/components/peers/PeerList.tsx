@@ -1,13 +1,12 @@
-import { Circle } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../register/controls';
 import { cn } from '../../lib/utils';
 import type { ApiPeer } from '../../lib/api';
 import { pingPeer, peerHost, shortDid, timeAgo } from '../../lib/api';
-import { MicroLabel } from '../ui/MicroLabel';
+import { LiveDot } from '../brand/Chrome';
+import { CopyValue } from '../ui/CopyValue';
 import { Skeleton } from '../ui/Skeleton';
 import { Pill } from '../ui/Pill';
-import { CopyButton } from '../ui/CopyButton';
 
 type PingState =
   | { kind: 'idle' }
@@ -34,19 +33,19 @@ function PingCell({ did }: { did: string }) {
         variant="tertiary"
         size="sm"
         onPress={ping}
-        aria-label="ping again"
+        aria-label="Ping again"
         className={cn(
-          'text-[11px] tabular-nums h-auto min-h-0 px-1 py-0 text-right',
-          state.ok ? 'text-success' : 'text-danger',
+          'font-mono text-[12px] tabular-nums h-auto min-h-0 px-1 py-0 text-right',
+          state.ok ? 'text-foreground' : 'text-danger',
         )}
       >
-        {state.ok ? `${state.ms}ms ✓` : 'no reply'}
+        {state.ok ? `${state.ms} ms` : 'No reply'}
       </Button>
     );
   }
   return (
-    <Pill onClick={ping} disabled={state.kind === 'pinging'} aria-label={`ping peer ${shortDid(did)}`}>
-      {state.kind === 'pinging' ? 'pinging…' : 'ping'}
+    <Pill onClick={ping} disabled={state.kind === 'pinging'} aria-label={`Ping peer ${shortDid(did)}`} className="rounded-[var(--radius-control)] px-2">
+      {state.kind === 'pinging' ? 'Pinging…' : 'Ping'}
     </Pill>
   );
 }
@@ -55,30 +54,25 @@ function PeerRow({ peer, index }: { peer: ApiPeer; index: number }) {
   return (
     <li
       className="grid grid-cols-[16px_minmax(0,1fr)_70px] md:grid-cols-[24px_minmax(0,4fr)_minmax(0,3fr)_120px_90px]
-        items-center gap-x-3 md:gap-x-4 px-4 sm:px-6 py-3
-        border-b border-separator last:border-b-0 hover:bg-surface-secondary transition-colors
-        "
+        items-center gap-x-3 md:gap-x-4 px-2 py-[9px]
+        border-b border-separator last:border-b-0 hover:bg-surface-secondary transition-colors"
       style={{ animationDelay: `${index * 16}ms` }}
     >
-      <span
-        aria-hidden="true"
-        className={cn('text-[8px] leading-none select-none', peer.reachable ? 'text-success' : 'text-danger')}
-        title={peer.reachable ? 'reachable' : 'unreachable'}
-      >
-        <Circle size={7} fill="currentColor" />
+      <span title={peer.reachable ? 'Reachable' : 'Unreachable'} className="flex">
+        <LiveDot on={peer.reachable} />
+        <span className="sr-only">{peer.reachable ? 'Reachable' : 'Unreachable'}</span>
       </span>
 
       {/* Identity */}
       <div className="flex items-center gap-2 min-w-0">
-        <span className="text-[14px] font-bold text-foreground truncate" title={peer.did}>
+        <CopyValue value={peer.did} name="peer DID" className="truncate text-[13px] font-medium text-foreground">
           {shortDid(peer.did)}
-        </span>
-        <CopyButton value={peer.did} label="did" />
+        </CopyValue>
         <a
           href={peer.http_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="md:hidden text-[11px] text-muted truncate"
+          className="md:hidden font-mono text-[12px] text-subtle truncate"
         >
           {peerHost(peer.http_url)}
         </a>
@@ -89,13 +83,13 @@ function PeerRow({ peer, index }: { peer: ApiPeer; index: number }) {
         href={peer.http_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="hidden md:block text-[12px] text-muted truncate"
+        className="hidden md:block font-mono text-[12.5px] text-muted truncate hover:text-foreground"
       >
         {peerHost(peer.http_url)} ↗
       </a>
 
       {/* Last seen */}
-      <span className="hidden md:block text-[12px] text-muted tabular-nums whitespace-nowrap">
+      <span className="hidden md:block font-mono text-[12px] text-subtle tabular-nums whitespace-nowrap">
         {peer.last_seen ? timeAgo(peer.last_seen) : 'never'}
       </span>
 
@@ -110,7 +104,7 @@ function PeerRow({ peer, index }: { peer: ApiPeer; index: number }) {
 function PeerRowSkeleton() {
   return (
     <li className="grid grid-cols-[16px_minmax(0,1fr)_70px] md:grid-cols-[24px_minmax(0,4fr)_minmax(0,3fr)_120px_90px]
-      items-center gap-x-3 md:gap-x-4 px-4 sm:px-6 py-3 border-b border-separator last:border-b-0">
+      items-center gap-x-3 md:gap-x-4 px-2 py-[9px] border-b border-separator last:border-b-0">
       <span />
       <Skeleton className="h-4 w-40 max-w-full" />
       <Skeleton className="hidden md:block h-4 w-36" />
@@ -129,15 +123,15 @@ interface PeerListProps {
 export function PeerList({ peers, loading = false, skeletonCount = 10 }: PeerListProps) {
   return (
     <div className={cn(
-      'border-t border-border transition-opacity duration-200',
+      'transition-opacity duration-200',
       loading && peers !== null && 'opacity-40 pointer-events-none',
     )}>
-      <div className="hidden md:grid grid-cols-[24px_minmax(0,4fr)_minmax(0,3fr)_120px_90px] gap-x-4 px-4 h-9 items-center border-b border-border">
+      <div className="hidden md:grid grid-cols-[24px_minmax(0,4fr)_minmax(0,3fr)_120px_90px] gap-x-4 px-2 h-9 items-center border-b border-border">
         <span />
-        <MicroLabel>peer</MicroLabel>
-        <MicroLabel>endpoint</MicroLabel>
-        <MicroLabel>last seen</MicroLabel>
-        <MicroLabel className="text-right">check</MicroLabel>
+        <span className="text-[12.5px] text-subtle">Peer</span>
+        <span className="text-[12.5px] text-subtle">Endpoint</span>
+        <span className="text-[12.5px] text-subtle">Last seen</span>
+        <span className="text-right text-[12.5px] text-subtle">Check</span>
       </div>
 
       {peers === null ? (
@@ -145,7 +139,7 @@ export function PeerList({ peers, loading = false, skeletonCount = 10 }: PeerLis
           {Array.from({ length: skeletonCount }, (_, i) => <PeerRowSkeleton key={i} />)}
         </ul>
       ) : peers.length === 0 ? (
-        <p className="m-0 py-20 text-center text-[13px] text-muted">no peers match</p>
+        <p className="m-0 py-14 text-[14px] text-muted">No peers match.</p>
       ) : (
         <ul className="m-0 p-0 list-none">
           {peers.map((peer, i) => <PeerRow key={peer.did} peer={peer} index={i} />)}

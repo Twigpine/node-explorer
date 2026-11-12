@@ -5,36 +5,36 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- gitlawb:social-meta:start -->
-    <title>gitlawb explorer</title>
-    <meta name="description" content="Browse live repositories on the gitlawb network — clone over gitlawb://, inspect ownership, and verify push certificates." />
+    <title>Twigpine Explorer</title>
+    <meta name="description" content="Browse live repositories on the Twigpine network — clone over gitlawb://, inspect ownership, and verify push certificates." />
     <link rel="canonical" href="https://explorer.twigpine.com/" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="gitlawb explorer" />
-    <meta property="og:title" content="gitlawb explorer" />
-    <meta property="og:description" content="Browse live repositories on the gitlawb network — clone over gitlawb://, inspect ownership, and verify push certificates." />
+    <meta property="og:site_name" content="Twigpine Explorer" />
+    <meta property="og:title" content="Twigpine Explorer" />
+    <meta property="og:description" content="Browse live repositories on the Twigpine network — clone over gitlawb://, inspect ownership, and verify push certificates." />
     <meta property="og:url" content="https://explorer.twigpine.com/" />
     <meta property="og:image" content="https://explorer.twigpine.com/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="gitlawb explorer — a terminal-style browser for live repositories on the gitlawb network" />
+    <meta property="og:image:alt" content="Twigpine Explorer, a browser for live repositories on the Twigpine network" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="gitlawb explorer" />
-    <meta name="twitter:description" content="Browse live repositories on the gitlawb network — clone over gitlawb://, inspect ownership, and verify push certificates." />
+    <meta name="twitter:title" content="Twigpine Explorer" />
+    <meta name="twitter:description" content="Browse live repositories on the Twigpine network — clone over gitlawb://, inspect ownership, and verify push certificates." />
     <meta name="twitter:image" content="https://explorer.twigpine.com/og.png" />
-    <meta name="twitter:image:alt" content="gitlawb explorer — a terminal-style browser for live repositories on the gitlawb network" />
+    <meta name="twitter:image:alt" content="Twigpine Explorer, a browser for live repositories on the Twigpine network" />
     <!-- gitlawb:social-meta:end -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700;800;900&family=Geist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <!-- Anti-FOUC: set theme before first paint. Stored choice wins, then the
-         OS preference, then dark — which is what this audience runs and what
-         the site shipped before. -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&family=Geist:wght@400..700&display=swap" rel="stylesheet" />
+    <!-- Anti-FOUC: set theme before first paint. A stored choice wins, then
+         the OS preference. useTheme reads the result back, so the two agree.
+         The key must match KEY in src/hooks/useTheme.ts. -->
     <script>
       (function () {
-        var stored = localStorage.getItem('gl-theme');
+        var stored = localStorage.getItem('twigpine-theme');
         var dark = stored
           ? stored === 'dark'
-          : !window.matchMedia('(prefers-color-scheme: light)').matches;
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
         var root = document.documentElement;
         root.classList.toggle('dark', dark);
         root.setAttribute('data-theme', dark ? 'dark' : 'light');

@@ -19,19 +19,29 @@ const REPOSITORY_CACHE_CONTROL =
 const FALLBACK_CACHE_CONTROL =
   'public, max-age=60, s-maxage=300, stale-while-revalidate=600, no-transform';
 
-const regularFontUrl = new URL(
-  '../node_modules/@expo-google-fonts/jetbrains-mono/400Regular/JetBrainsMono_400Regular.ttf',
-  import.meta.url,
-);
-const boldFontUrl = new URL(
-  '../node_modules/@expo-google-fonts/jetbrains-mono/700Bold/JetBrainsMono_700Bold.ttf',
-  import.meta.url,
-);
+const FONT_FACES = [
+  ['Geist', 400],
+  ['Geist', 500],
+  ['Geist Mono', 400],
+  ['Geist Mono', 500],
+] as const;
+
+// One per face above, in the same order. Literal `new URL(..., import.meta.url)`
+// calls: Vercel's
+// function tracer follows these to bundle the font files, and it cannot follow
+// a path built at runtime.
+const fontUrls = [
+  new URL('../node_modules/@expo-google-fonts/geist/400Regular/Geist_400Regular.ttf', import.meta.url),
+  new URL('../node_modules/@expo-google-fonts/geist/500Medium/Geist_500Medium.ttf', import.meta.url),
+  new URL('../node_modules/@expo-google-fonts/geist-mono/400Regular/GeistMono_400Regular.ttf', import.meta.url),
+  new URL('../node_modules/@expo-google-fonts/geist-mono/500Medium/GeistMono_500Medium.ttf', import.meta.url),
+];
 
 type OgFonts = NonNullable<ImageResponseOptions['fonts']>;
 
 interface FontAssets {
   fonts: OgFonts;
+  /** Geist Mono regular: the face the repository name and branch are set in. */
   regular: OpenTypeFont;
 }
 
@@ -41,30 +51,20 @@ function exactArrayBuffer(bytes: Uint8Array): ArrayBuffer {
   return copy.buffer;
 }
 
-// Start both reads at module initialization so concurrent requests share the
+// Start the reads at module initialization so concurrent requests share the
 // same work. TTF is intentional: Satori cannot render WOFF2 font data.
-const fontAssetsPromise: Promise<FontAssets> = Promise.all([
-  readFile(regularFontUrl),
-  readFile(boldFontUrl),
-]).then(([regular, bold]) => {
-  const regularData = exactArrayBuffer(regular);
-  const boldData = exactArrayBuffer(bold);
+const fontAssetsPromise: Promise<FontAssets> = Promise.all(
+  fontUrls.map(url => readFile(url)),
+).then(files => {
+  const data = files.map(exactArrayBuffer);
   return {
-    fonts: [
-      {
-        name: 'JetBrains Mono',
-        data: regularData,
-        style: 'normal' as const,
-        weight: 400 as const,
-      },
-      {
-        name: 'JetBrains Mono',
-        data: boldData,
-        style: 'normal' as const,
-        weight: 700 as const,
-      },
-    ],
-    regular: parse(regularData),
+    fonts: FONT_FACES.map(([name, weight], index) => ({
+      name,
+      data: data[index],
+      style: 'normal' as const,
+      weight,
+    })),
+    regular: parse(data[2]),
   };
 });
 
@@ -197,16 +197,22 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react';
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 
+// Canopy, the Twigpine theme: paper, one ink at a few opacities, and the
+// needle, which appears once, as the bud on the mark.
 const colors = {
-  background: '#0a0a0a',
-  foreground: '#f2f2f2',
-  surface: '#0d0d0d',
-  border: '#1c1c1c',
-  grid: '#131313',
-  muted: '#8a8a8a',
-  dim: '#555555',
-  warm: '#c9a96e',
+  paper: '#ffffff',
+  ink: '#0c1210',
+  ink2: 'rgba(12, 18, 16, 0.72)',
+  ink3: 'rgba(12, 18, 16, 0.62)',
+  ink4: 'rgba(12, 18, 16, 0.48)',
+  rule: 'rgba(12, 18, 16, 0.12)',
+  rule2: 'rgba(12, 18, 16, 0.22)',
+  grid: 'rgba(12, 18, 16, 0.045)',
+  needle: '#0b7a48',
 };
+
+const SANS = 'Geist';
+const MONO = 'Geist Mono';
 
 const verticalGridLines = Array.from({ length: Math.ceil(OG_WIDTH / 80) - 1 }, (_, index) =>
   (index + 1) * 80,
@@ -216,12 +222,10 @@ const horizontalGridLines = Array.from({ length: Math.ceil(OG_HEIGHT / 80) - 1 }
 );
 
 const labelStyle: CSSProperties = {
-  color: colors.dim,
-  fontSize: 13,
-  fontWeight: 700,
-  letterSpacing: '0.16em',
+  color: colors.ink3,
+  fontFamily: SANS,
+  fontSize: 15,
   lineHeight: 1,
-  textTransform: 'uppercase',
 };
 
 function truncateEnd(value: string, limit: number): string {
@@ -301,13 +305,13 @@ function fitLines(value: string, maxUnits: number, maxLines: number): string[] {
 
 function formatDate(value: string): string {
   const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return 'UNKNOWN';
+  if (!Number.isFinite(date.getTime())) return 'Unknown';
   return new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'short',
     timeZone: 'UTC',
     year: 'numeric',
-  }).format(date).toUpperCase();
+  }).format(date);
 }
 
 function formatStars(value: number): string {
@@ -315,12 +319,12 @@ function formatStars(value: number): string {
   return new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 1,
     notation: 'compact',
-  }).format(value).toUpperCase();
+  }).format(value);
 }
 
 function nameFontSize(value: string): number {
   const length = textUnits(value);
-  if (length <= 18) return 64;
+  if (length <= 18) return 68;
   if (length <= 30) return 56;
   if (length <= 46) return 48;
   if (length <= 64) return 41;
@@ -334,7 +338,6 @@ function GridLines(): ReactElement {
         bottom: 0,
         display: 'flex',
         left: 0,
-        opacity: 0.7,
         overflow: 'hidden',
         position: 'absolute',
         right: 0,
@@ -371,24 +374,26 @@ function GridLines(): ReactElement {
   );
 }
 
-function GitlawbMark(): ReactElement {
+/** The Pine mark: stem, three tiers, and the bud in the needle. */
+function PineMark({ size = 38 }: { size?: number }): ReactElement {
   return (
-    <svg
-      aria-hidden="true"
-      fill={colors.foreground}
-      height="32"
-      viewBox="313 266 400 493"
-      width="26"
-    >
-      <path
-        fillRule="evenodd"
-        d="M 497.00 750.03 C485.24,743.21 466.66,732.70 457.28,727.55 L 448.06 722.50 L 448.03 680.86 L 448.00 639.23 L 457.25 634.00 C472.55,625.35 495.38,611.74 497.29,610.13 C498.98,608.70 499.07,604.95 498.96,544.16 L 498.83 479.70 L 509.52 468.98 C516.12,462.36 519.78,457.98 519.09,457.55 C517.38,456.50 512.87,447.13 511.36,441.50 C508.70,431.54 510.36,420.73 516.28,409.64 C525.33,392.64 544.72,383.56 564.80,386.91 C569.03,387.62 573.12,388.54 573.89,388.97 C574.87,389.51 581.57,383.50 596.59,368.62 L 617.89 347.50 L 615.62 343.50 C614.37,341.30 612.59,337.45 611.67,334.95 C609.76,329.79 607.97,314.14 609.19,313.38 C609.64,313.11 610.00,311.53 610.00,309.88 C610.00,305.54 617.45,290.81 622.02,286.10 C632.10,275.71 643.33,271.00 658.00,271.00 C673.15,271.00 683.48,275.28 694.01,285.93 C700.28,292.27 704.28,299.82 706.60,309.69 C708.71,318.66 707.93,326.65 703.93,337.01 C698.88,350.12 687.33,360.97 673.75,365.37 C672.13,365.90 672.00,368.50 671.99,401.22 L 671.99 436.50 L 607.84 500.75 C572.56,536.09 543.54,565.00 543.35,565.00 C543.16,565.00 543.00,557.01 543.00,547.25 L 543.00 529.49 L 594.50 478.00 L 646.00 426.51 L 646.00 396.41 L 646.00 366.32 L 641.84 365.07 L 637.68 363.82 L 616.65 384.85 L 595.62 405.88 L 598.95 412.69 C603.32,421.65 604.72,432.66 602.55,441.12 C598.99,454.99 590.73,465.73 578.90,471.86 C568.94,477.01 559.58,478.74 550.29,477.13 C546.56,476.49 542.74,475.86 541.81,475.73 C540.86,475.60 536.83,478.72 532.56,482.91 L 525.00 490.31 L 525.00 555.56 L 525.00 620.81 L 534.48 626.46 C539.69,629.57 544.22,632.54 544.54,633.06 C544.86,633.58 551.97,634.00 560.56,634.00 L 576.00 634.00 L 576.00 648.50 L 576.00 663.00 L 569.00 663.00 L 562.00 663.00 L 562.00 671.50 L 562.00 680.00 L 569.00 680.00 L 576.00 680.00 L 576.00 694.00 L 576.00 708.00 L 562.50 708.00 L 549.00 708.00 L 549.00 718.93 L 549.00 729.86 L 541.95 733.46 C535.72,736.63 523.94,743.23 510.00,751.35 C507.52,752.80 505.05,753.94 504.50,753.89 C503.95,753.84 500.58,752.10 497.00,750.03 ZM 511.08 713.20 C514.70,711.17 522.01,707.06 527.33,704.07 L 537.00 698.65 L 537.00 681.04 L 537.00 663.43 L 520.61 653.70 L 504.21 643.97 L 491.36 651.80 C484.28,656.11 477.49,660.28 476.25,661.06 C474.05,662.45 474.00,662.88 474.00,681.03 L 474.00 699.57 L 480.75 703.50 C484.46,705.66 488.85,708.18 490.50,709.09 C492.15,710.00 495.75,712.12 498.50,713.80 C501.25,715.47 503.73,716.86 504.00,716.88 C504.27,716.89 507.46,715.24 511.08,713.20 ZM 568.76 449.19 C573.99,445.04 576.64,440.72 577.50,434.93 C578.77,426.29 575.09,418.69 567.27,413.86 C564.48,412.13 562.10,411.60 557.06,411.59 C546.92,411.55 540.78,415.60 537.06,424.78 C534.39,431.38 537.72,443.87 543.25,447.98 C549.18,452.37 551.47,453.12 558.07,452.79 C563.71,452.50 565.22,451.99 568.76,449.19 ZM 667.79 340.09 C676.34,335.68 682.71,325.21 681.63,317.34 C679.43,301.30 663.73,292.08 649.05,298.22 C636.76,303.35 631.78,317.81 638.05,330.10 C640.14,334.19 644.98,338.64 649.50,340.61 C654.06,342.60 663.43,342.34 667.79,340.09 ZM 416.71 500.21 L 353.00 436.49 L 352.97 401.00 L 352.95 365.50 L 345.09 361.78 C333.75,356.42 326.93,349.80 321.74,339.12 L 317.54 330.50 L 317.57 318.82 C317.60,307.16 317.61,307.13 321.76,298.76 C327.23,287.71 333.74,281.21 344.87,275.71 L 353.37 271.50 L 366.05 271.53 C378.60,271.56 378.80,271.60 386.11,275.22 C397.22,280.73 404.22,287.50 408.97,297.35 C416.92,313.84 416.92,324.90 408.95,340.60 C403.93,350.48 390.68,361.76 381.15,364.25 C379.01,364.81 379.00,364.93 379.00,395.29 L 379.00 425.78 L 429.98 476.20 L 480.95 526.63 L 481.11 544.85 C481.20,554.87 481.08,563.26 480.84,563.49 C480.61,563.73 451.75,535.25 416.71,500.21 ZM 376.60 338.75 C384.76,333.26 390.02,323.13 388.50,315.85 C387.60,311.52 383.65,304.69 380.22,301.50 C376.25,297.82 368.85,295.64 363.20,296.49 C343.65,299.42 336.23,320.82 349.77,335.23 C353.82,339.54 359.76,342.00 366.14,342.00 C370.84,342.00 372.57,341.46 376.60,338.75 Z"
-      />
+    <svg aria-hidden="true" height={size} viewBox="0 0 32 32" width={size}>
+      <g
+        fill="none"
+        stroke={colors.ink}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.6"
+      >
+        <path d="M16 29.5V9" />
+        <path d="M10 15.5l6-5.5 6 5.5M8 21.5l8-6.5 8 6.5M6.5 27.5l9.5-7 9.5 7" />
+      </g>
+      <circle cx="16" cy="5.2" fill={colors.needle} r="3" stroke={colors.ink} strokeWidth="1.6" />
     </svg>
   );
 }
 
-function Header(): ReactElement {
+function Header({ note }: { note: string }): ReactElement {
   return (
     <div
       style={{
@@ -402,65 +407,51 @@ function Header(): ReactElement {
       }}
     >
       <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row' }}>
-        <GitlawbMark />
+        <PineMark />
         <div
           style={{
-            color: colors.foreground,
+            color: colors.ink,
             display: 'flex',
-            fontSize: 18,
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-            marginLeft: 14,
+            fontFamily: SANS,
+            fontSize: 26,
+            fontWeight: 500,
+            letterSpacing: '-0.03em',
+            marginLeft: 12,
           }}
         >
-          gitlawb
+          twigpine
         </div>
         <div
           style={{
-            color: colors.dim,
+            color: colors.ink3,
             display: 'flex',
-            fontSize: 17,
-            marginLeft: 8,
+            fontFamily: SANS,
+            fontSize: 24,
+            marginLeft: 10,
           }}
         >
           / explorer
         </div>
       </div>
-      <div
-        style={{
-          alignItems: 'center',
-          border: `1px solid ${colors.border}`,
-          color: colors.muted,
-          display: 'flex',
-          fontSize: 12,
-          fontWeight: 700,
-          height: 32,
-          letterSpacing: '0.15em',
-          padding: '0 14px',
-          textTransform: 'uppercase',
-        }}
-      >
-        Repository
+      <div style={{ color: colors.ink3, display: 'flex', fontFamily: MONO, fontSize: 16 }}>
+        {note}
       </div>
     </div>
   );
 }
 
-function Pill({ children, accent = false }: { children: ReactNode; accent?: boolean }): ReactElement {
+function Tag({ children }: { children: ReactNode }): ReactElement {
   return (
     <div
       style={{
         alignItems: 'center',
-        backgroundColor: accent ? 'rgba(201, 169, 110, 0.08)' : colors.surface,
-        border: `1px solid ${accent ? 'rgba(201, 169, 110, 0.45)' : colors.border}`,
-        color: accent ? colors.warm : colors.muted,
+        border: `1px solid ${colors.rule2}`,
+        color: colors.ink2,
         display: 'flex',
-        fontSize: 12,
-        fontWeight: 700,
+        fontFamily: MONO,
+        fontSize: 16,
         height: 32,
-        letterSpacing: '0.1em',
-        padding: '0 13px',
-        textTransform: 'uppercase',
+        padding: '0 11px',
       }}
     >
       {children}
@@ -472,27 +463,19 @@ interface StatProps {
   label: string;
   value: string;
   width: string;
-  last?: boolean;
+  mono?: boolean;
 }
 
-function Stat({ label, value, width, last = false }: StatProps): ReactElement {
+function Stat({ label, value, width, mono = false }: StatProps): ReactElement {
   return (
-    <div
-      style={{
-        borderRight: last ? 'none' : `1px solid ${colors.border}`,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        paddingLeft: last ? 24 : 0,
-        width,
-      }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width }}>
       <div style={labelStyle}>{label}</div>
       <div
         style={{
-          color: colors.foreground,
+          color: colors.ink,
           display: 'flex',
-          fontSize: 16,
+          fontFamily: mono ? MONO : SANS,
+          fontSize: 19,
           lineHeight: 1.2,
           marginTop: 9,
         }}
@@ -503,14 +486,35 @@ function Stat({ label, value, width, last = false }: StatProps): ReactElement {
   );
 }
 
+/** One corner bracket of the instrument frame. */
+function Corner({ x, y }: { x: 'left' | 'right'; y: 'top' | 'bottom' }): ReactElement {
+  const side = `2px solid ${colors.ink}`;
+  return (
+    <div
+      style={{
+        [x]: 28,
+        [y]: 28,
+        borderBottom: y === 'bottom' ? side : 'none',
+        borderLeft: x === 'left' ? side : 'none',
+        borderRight: x === 'right' ? side : 'none',
+        borderTop: y === 'top' ? side : 'none',
+        display: 'flex',
+        height: 18,
+        position: 'absolute',
+        width: 18,
+      }}
+    />
+  );
+}
+
 function Frame({ children }: { children: ReactNode }): ReactElement {
   return (
     <div
       style={{
-        backgroundColor: colors.background,
-        color: colors.foreground,
+        backgroundColor: colors.paper,
+        color: colors.ink,
         display: 'flex',
-        fontFamily: 'JetBrains Mono',
+        fontFamily: SANS,
         height: '100%',
         overflow: 'hidden',
         position: 'relative',
@@ -518,34 +522,16 @@ function Frame({ children }: { children: ReactNode }): ReactElement {
       }}
     >
       <GridLines />
-      <div
-        style={{
-          border: `1px solid ${colors.border}`,
-          bottom: 24,
-          display: 'flex',
-          left: 24,
-          position: 'absolute',
-          right: 24,
-          top: 24,
-        }}
-      />
-      <div
-        style={{
-          backgroundColor: colors.warm,
-          display: 'flex',
-          height: 2,
-          left: 48,
-          position: 'absolute',
-          top: 24,
-          width: 128,
-        }}
-      />
+      <Corner x="left" y="top" />
+      <Corner x="right" y="top" />
+      <Corner x="left" y="bottom" />
+      <Corner x="right" y="bottom" />
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          padding: '48px 56px 42px',
+          padding: '56px 64px 50px',
           position: 'relative',
           width: '100%',
         }}
@@ -560,51 +546,51 @@ export function RepositoryOgCard({ model }: { model: RepoSocialModel }): ReactEl
   const owner = truncateMiddle(model.owner.key || model.owner.display, 10, 5);
   const fontSize = nameFontSize(model.name);
   const nameLines = fitLines(model.name, Math.floor(1000 / (fontSize * 0.62)), 2);
-  const descriptionLines = fitLines(model.description, 80, 2);
+  const descriptionLines = fitLines(model.description, 86, 2);
 
   return (
     <Frame>
-      <Header />
+      <Header note="Repository" />
       <div
         style={{
           display: 'flex',
           flex: 1,
           flexDirection: 'column',
-          marginTop: 27,
+          marginTop: 36,
           minHeight: 0,
         }}
       >
         <div
           style={{
-            color: colors.warm,
+            color: colors.ink4,
             display: 'flex',
-            fontSize: 20,
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
+            fontFamily: MONO,
+            fontSize: 24,
             lineHeight: 1,
           }}
         >
-          {model.owner.display || 'unknown'} /
+          {model.owner.display || 'unknown'}/
         </div>
         <div
           style={{
-            color: colors.foreground,
+            color: colors.ink,
             display: 'flex',
             flexDirection: 'column',
-            marginTop: 8,
-            maxWidth: 1030,
+            marginTop: 10,
+            maxWidth: 1040,
           }}
         >
           {nameLines.map((line, index) => (
             <div
               key={`${index}-${line}`}
               style={{
-                color: colors.foreground,
+                color: colors.ink,
                 display: 'flex',
+                fontFamily: MONO,
                 fontSize,
-                fontWeight: 700,
-                letterSpacing: '-0.055em',
-                lineHeight: 1.04,
+                fontWeight: 500,
+                letterSpacing: '-0.04em',
+                lineHeight: 1.06,
                 whiteSpace: 'nowrap',
               }}
             >
@@ -614,10 +600,10 @@ export function RepositoryOgCard({ model }: { model: RepoSocialModel }): ReactEl
         </div>
         <div
           style={{
-            color: colors.muted,
+            color: colors.ink2,
             display: 'flex',
             flexDirection: 'column',
-            marginTop: 16,
+            marginTop: 18,
             maxWidth: 1010,
           }}
         >
@@ -625,9 +611,10 @@ export function RepositoryOgCard({ model }: { model: RepoSocialModel }): ReactEl
             <div
               key={`${index}-${line}`}
               style={{
-                color: colors.muted,
+                color: colors.ink2,
                 display: 'flex',
-                fontSize: 20,
+                fontFamily: SANS,
+                fontSize: 24,
                 lineHeight: 1.35,
                 whiteSpace: 'nowrap',
               }}
@@ -642,28 +629,89 @@ export function RepositoryOgCard({ model }: { model: RepoSocialModel }): ReactEl
             display: 'flex',
             flexDirection: 'row',
             gap: 9,
-            marginTop: 21,
+            marginTop: 22,
           }}
         >
-          <Pill accent>{truncateEnd(model.branch, 28)}</Pill>
-          <Pill>{model.visibility}</Pill>
-          {model.isFork ? <Pill>fork</Pill> : null}
+          <Tag>{truncateEnd(model.branch, 28)}</Tag>
+          <Tag>{model.visibility}</Tag>
+          {model.isFork ? <Tag>fork</Tag> : null}
         </div>
       </div>
       <div
         style={{
-          borderTop: `1px solid ${colors.border}`,
+          borderTop: `1px solid ${colors.rule2}`,
           display: 'flex',
           flexDirection: 'row',
-          height: 74,
-          paddingTop: 17,
+          height: 76,
+          paddingTop: 18,
           width: '100%',
         }}
       >
-        <Stat label="Owner" value={owner || 'UNKNOWN'} width="36%" />
+        <Stat label="Owner" value={owner || 'Unknown'} width="36%" mono />
         <Stat label="Updated" value={formatDate(model.updatedAt)} width="24%" />
         <Stat label="Created" value={formatDate(model.createdAt)} width="24%" />
-        <Stat label="Stars" value={formatStars(model.stars)} width="16%" last />
+        <Stat label="Stars" value={formatStars(model.stars)} width="16%" />
+      </div>
+    </Frame>
+  );
+}
+
+/**
+ * A card that states one thing in two tones: the claim in ink, the second
+ * sentence dimmer. Used for the generic fallback here and to draw the static
+ * images in public/ (og.png, og-docs.png).
+ */
+export function StatementOgCard({
+  note,
+  claim,
+  second,
+  footer,
+}: {
+  note: string;
+  claim: string;
+  second: string;
+  footer: string;
+}): ReactElement {
+  const headline: CSSProperties = {
+    display: 'flex',
+    fontFamily: SANS,
+    fontSize: 70,
+    fontWeight: 500,
+    letterSpacing: '-0.04em',
+    lineHeight: 1.04,
+  };
+  return (
+    <Frame>
+      <Header note={note} />
+      <div
+        style={{
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          maxWidth: 1040,
+          paddingBottom: 12,
+        }}
+      >
+        <div style={{ ...headline, color: colors.ink }}>{claim}</div>
+        <div style={{ ...headline, color: colors.ink4, marginTop: 6 }}>{second}</div>
+      </div>
+      <div
+        style={{
+          alignItems: 'center',
+          borderTop: `1px solid ${colors.rule2}`,
+          color: colors.ink3,
+          display: 'flex',
+          flexDirection: 'row',
+          flexShrink: 0,
+          fontFamily: SANS,
+          fontSize: 20,
+          height: 54,
+          paddingTop: 16,
+          width: '100%',
+        }}
+      >
+        {footer}
       </div>
     </Frame>
   );
@@ -671,67 +719,16 @@ export function RepositoryOgCard({ model }: { model: RepoSocialModel }): ReactEl
 
 export function GenericOgCard(): ReactElement {
   return (
-    <Frame>
-      <Header />
-      <div
-        style={{
-          display: 'flex',
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          maxWidth: 1000,
-          paddingBottom: 20,
-        }}
-      >
-        <div style={labelStyle}>Federated git / public network</div>
-        <div
-          style={{
-            color: colors.foreground,
-            display: 'flex',
-            fontSize: 57,
-            fontWeight: 700,
-            letterSpacing: '-0.055em',
-            lineHeight: 1.08,
-            marginTop: 20,
-          }}
-        >
-          Explore the gitlawb network.
-        </div>
-        <div
-          style={{
-            color: colors.muted,
-            display: 'flex',
-            fontSize: 21,
-            lineHeight: 1.45,
-            marginTop: 22,
-            maxWidth: 900,
-          }}
-        >
-          Browse repositories, inspect history, and verify federated activity.
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', marginTop: 28 }}>
-          <Pill accent>Live repository explorer</Pill>
-        </div>
-      </div>
-      <div
-        style={{
-          alignItems: 'center',
-          borderTop: `1px solid ${colors.border}`,
-          color: colors.dim,
-          display: 'flex',
-          flexDirection: 'row',
-          flexShrink: 0,
-          fontSize: 15,
-          height: 52,
-          justifyContent: 'space-between',
-          letterSpacing: '0.05em',
-          paddingTop: 12,
-          width: '100%',
-        }}
-      >
-        <div style={{ display: 'flex' }}>explorer.twigpine.com</div>
-        <div style={{ color: colors.warm, display: 'flex' }}>OPEN / VERIFY / FEDERATE</div>
-      </div>
-    </Frame>
+    <StatementOgCard
+      note="explorer.twigpine.com"
+      claim="Every push is signed by the key that made it."
+      second="Check any of them yourself."
+      footer="Browse repositories, inspect history, and verify push certificates."
+    />
   );
+}
+
+/** Font data for callers that render a card outside the request handler. */
+export async function ogFonts(): Promise<OgFonts> {
+  return (await fontAssetsPromise).fonts;
 }

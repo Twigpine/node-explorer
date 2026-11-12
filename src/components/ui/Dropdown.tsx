@@ -57,7 +57,7 @@ export function Dropdown<T extends string>({
           aria-labelledby={`${labelId} ${controlId}`}
           className={cn(
             'group inline-flex items-center gap-1.5 h-9 sm:h-8 pl-3.5 pr-3 text-[13px] whitespace-nowrap',
-            'rounded-[var(--radius-control)] border border-border bg-transparent text-foreground',
+            'rounded-[var(--radius-control)] border border-faint bg-transparent text-foreground hover:border-foreground',
             'cursor-pointer transition-colors hover:border-foreground/45 hover:bg-surface-secondary',
             'data-[state=open]:border-foreground/60 data-[state=open]:bg-surface-secondary',
             'focus:outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2',
@@ -79,8 +79,7 @@ export function Dropdown<T extends string>({
             sideOffset={6}
             className={cn(
               'z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden',
-              'rounded-[var(--radius)] border border-border bg-background p-1',
-              'shadow-[0_12px_32px_-8px_rgba(0,0,0,0.28)]',
+              'border border-foreground bg-background p-1',
               'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
               'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
               'data-[side=bottom]:slide-in-from-top-1 data-[side=top]:slide-in-from-bottom-1',

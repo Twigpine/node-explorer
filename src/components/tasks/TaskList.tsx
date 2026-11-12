@@ -1,4 +1,3 @@
-import { Circle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { ApiTask } from '../../lib/api';
@@ -16,22 +15,18 @@ function TaskRow({ task, index }: { task: ApiTask; index: number }) {
     >
       <Link
         to={`/tasks/${task.id}`}
-        className="grid grid-cols-[16px_minmax(0,1fr)_80px] md:grid-cols-[24px_minmax(0,1fr)_150px_150px_90px]
-          items-baseline gap-x-3 md:gap-x-4 px-4 sm:px-6 py-3
-          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        data-row-link
+        className="grid grid-cols-[minmax(0,1fr)_80px] md:grid-cols-[84px_minmax(0,1fr)_130px_130px_80px]
+          items-baseline gap-x-3 md:gap-x-4 px-2 py-[10px]"
       >
-        <span
-          aria-hidden="true"
-          className={cn('text-[8px] leading-none select-none self-start pt-[5px]', taskStatusColor(task.status))}
-          title={task.status}
-        >
-          <Circle size={7} fill="currentColor" />
+        <span className={cn('max-md:hidden text-[12.5px]', taskStatusColor(task.status))}>
+          {task.status}
         </span>
 
         {/* Title + kind/capability */}
         <span className="min-w-0">
-          <span className="block truncate text-[13px] font-bold text-foreground">{taskTitle(task)}</span>
-          <span className="block mt-0.5 text-[11px] text-muted truncate">
+          <span className="block truncate text-[14px] font-medium text-foreground">{taskTitle(task)}</span>
+          <span className="block mt-0.5 font-mono text-[12px] text-subtle truncate">
             {task.kind}
             {task.capability && <> · {task.capability}</>}
             <span className="md:hidden"> · {task.status}</span>
@@ -39,20 +34,20 @@ function TaskRow({ task, index }: { task: ApiTask; index: number }) {
         </span>
 
         {/* Delegator */}
-        <span className="hidden md:block text-[12px] text-muted truncate" title={task.delegator_did}>
-          {shortDid(task.delegator_did)} →
+        <span className="hidden md:block font-mono text-[12.5px] text-muted truncate" title={task.delegator_did}>
+          {shortDid(task.delegator_did)}
         </span>
 
         {/* Assignee */}
         <span
-          className={cn('hidden md:block text-[12px] truncate', task.assignee_did ? 'text-muted' : 'text-muted')}
+          className={cn('hidden md:block text-[12.5px] truncate', task.assignee_did ? 'font-mono text-muted' : 'text-subtle')}
           title={task.assignee_did ?? undefined}
         >
-          {task.assignee_did ? shortDid(task.assignee_did) : 'unclaimed'}
+          {task.assignee_did ? shortDid(task.assignee_did) : 'Unclaimed'}
         </span>
 
         {/* Time */}
-        <span className="text-[11px] text-muted tabular-nums text-right whitespace-nowrap">
+        <span className="font-mono text-[12px] text-subtle tabular-nums text-right whitespace-nowrap">
           {timeAgo(task.created_at)}
         </span>
       </Link>
@@ -62,9 +57,9 @@ function TaskRow({ task, index }: { task: ApiTask; index: number }) {
 
 function TaskRowSkeleton() {
   return (
-    <li className="grid grid-cols-[16px_minmax(0,1fr)_80px] md:grid-cols-[24px_minmax(0,1fr)_150px_150px_90px]
-      items-center gap-x-3 md:gap-x-4 px-4 sm:px-6 py-3 border-b border-separator last:border-b-0">
-      <span />
+    <li className="grid grid-cols-[minmax(0,1fr)_80px] md:grid-cols-[84px_minmax(0,1fr)_130px_130px_80px]
+      items-center gap-x-3 md:gap-x-4 px-2 py-[10px] border-b border-separator last:border-b-0">
+      <span className="max-md:hidden" />
       <div>
         <Skeleton className="h-4 w-64 max-w-full" />
         <Skeleton className="h-3 w-32 mt-1.5" />
@@ -83,14 +78,14 @@ interface TaskListProps {
   emptyMessage?: string;
 }
 
-export function TaskList({ tasks, loading = false, skeletonCount = 10, emptyMessage = 'no tasks match' }: TaskListProps) {
+export function TaskList({ tasks, loading = false, skeletonCount = 10, emptyMessage = 'No tasks match.' }: TaskListProps) {
   return (
     <div className={cn(
-      'border-t border-border transition-opacity duration-200',
+      'transition-opacity duration-200',
       loading && tasks !== null && 'opacity-40 pointer-events-none',
     )}>
-      <div className="hidden md:grid grid-cols-[24px_minmax(0,1fr)_150px_150px_90px] gap-x-4 px-4 h-9 items-center border-b border-border">
-        <span />
+      <div className="hidden md:grid grid-cols-[84px_minmax(0,1fr)_130px_130px_80px] gap-x-4 px-2 h-9 items-center border-b border-border">
+        <MicroLabel>status</MicroLabel>
         <MicroLabel>task</MicroLabel>
         <MicroLabel>delegator</MicroLabel>
         <MicroLabel>assignee</MicroLabel>
@@ -102,7 +97,7 @@ export function TaskList({ tasks, loading = false, skeletonCount = 10, emptyMess
           {Array.from({ length: skeletonCount }, (_, i) => <TaskRowSkeleton key={i} />)}
         </ul>
       ) : tasks.length === 0 ? (
-        <p className="m-0 py-20 text-center text-[13px] text-muted">{emptyMessage}</p>
+        <p className="m-0 py-14 text-[14px] text-muted">{emptyMessage}</p>
       ) : (
         <ul className="m-0 p-0 list-none">
           {tasks.map((task, i) => <TaskRow key={task.id} task={task} index={i} />)}

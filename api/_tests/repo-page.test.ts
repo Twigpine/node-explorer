@@ -106,7 +106,7 @@ describe('repository page HTML shell', () => {
     expect(indexFetch).toHaveBeenCalledTimes(1);
     expect(fetchRepositoryMock).toHaveBeenCalledTimes(1);
     expect(fetchRepositoryMock).toHaveBeenCalledWith('z6Owner', 'demo<&', expect.any(AbortSignal));
-    expect(html).toContain('<title>z6Owner/demo&lt;&amp; · gitlawb explorer</title>');
+    expect(html).toContain('<title>z6Owner/demo&lt;&amp; · Twigpine Explorer</title>');
     expect(html).toContain('content="A &quot;quoted&quot; &lt;repository&gt; &amp; more"');
     expect(html).toContain(
       'href="https://preview.example/repos/z6Owner/demo%3C%26"',
@@ -153,7 +153,7 @@ describe('repository page HTML shell', () => {
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('private, no-store, max-age=0');
     expect(response.headers.get('x-robots-tag')).toBe('noindex, noarchive');
-    expect(html).toContain('<title>gitlawb explorer</title>');
+    expect(html).toContain('<title>Twigpine Explorer</title>');
     expect(html).toContain('<meta name="robots" content="noindex, noarchive" />');
     expect(html).not.toContain('secret-name');
     expect(html).not.toContain('extremely secret description');

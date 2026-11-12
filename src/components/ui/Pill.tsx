@@ -17,7 +17,7 @@ interface PillProps {
 
 /** A small label holding one value. */
 const base =
-  'inline-flex items-center rounded-full border px-2 py-[2px] text-[12px] transition-colors';
+  'inline-flex items-center border px-1.5 py-px text-[12px] transition-colors';
 
 export function Pill({
   children,
@@ -29,7 +29,7 @@ export function Pill({
   ...rest
 }: PillProps) {
   const tone = active
-    ? 'border-accent/50 text-accent bg-accent-subtle'
+    ? 'border-foreground text-foreground'
     : 'border-border text-muted hover:text-foreground';
 
   const cls = cn(

@@ -39,15 +39,15 @@ export function RepoPagination({
         : [1, 0, page - 1, page, page + 1, 0, totalPages];
 
   const step =
-    'text-[13px] px-2 py-1 rounded-[var(--radius)] transition-colors ' +
+    'text-[13px] px-2 py-1 transition-colors ' +
     'disabled:opacity-30 disabled:cursor-not-allowed';
 
   return (
     <nav
-      aria-label="pagination"
+      aria-label="Pagination"
       className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mt-8 pt-4 border-t border-border"
     >
-      <p className="m-0 text-[13px] tabular text-muted">
+      <p className="m-0 font-mono text-[12.5px] tabular text-subtle">
         {windowStart.toLocaleString()}&ndash;{windowEnd.toLocaleString()}
         <span className="text-subtle px-1.5">/</span>
         {totalCount.toLocaleString()} {noun}
@@ -68,7 +68,7 @@ export function RepoPagination({
             className={cn(step, 'text-muted hover:text-foreground')}
             disabled={page <= 1}
             onClick={() => onPageChange(page - 1)}
-            aria-label="previous page"
+            aria-label="Previous page"
           >
             &larr;
           </button>
@@ -86,13 +86,13 @@ export function RepoPagination({
                 aria-current={p === page ? 'page' : undefined}
                 aria-label={`page ${p}`}
                 className={cn(
-                  'relative text-[13px] tabular px-2 py-1 rounded-[var(--radius)] transition-colors',
-                  p === page ? 'text-foreground' : 'text-muted hover:text-foreground',
+                  'relative font-mono text-[13px] tabular px-2 py-1 transition-colors',
+                  p === page ? 'text-foreground' : 'text-subtle hover:text-foreground',
                 )}
               >
                 {p}
                 {p === page && (
-                  <span aria-hidden="true" className="absolute inset-x-1 bottom-0 h-[2px] bg-accent" />
+                  <span aria-hidden="true" className="absolute inset-x-1 bottom-0 h-px bg-foreground" />
                 )}
               </button>
             ),
@@ -103,7 +103,7 @@ export function RepoPagination({
             className={cn(step, 'text-muted hover:text-foreground')}
             disabled={page >= totalPages}
             onClick={() => onPageChange(page + 1)}
-            aria-label="next page"
+            aria-label="Next page"
           >
             &rarr;
           </button>

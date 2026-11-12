@@ -28,9 +28,9 @@ const SORT_OPTIONS: { value: RepoSort; label: string }[] = [
 ];
 
 const FORK_FILTERS: { value: ForkFilter; label: string }[] = [
-  { value: 'all', label: 'all' },
-  { value: 'forks', label: 'forks' },
-  { value: 'sources', label: 'sources' },
+  { value: 'all', label: 'All' },
+  { value: 'forks', label: 'Forks' },
+  { value: 'sources', label: 'Sources' },
 ];
 
 export function RepoToolbar({
@@ -75,8 +75,8 @@ export function RepoToolbar({
           className="w-full"
         />
         {search && searchScope === 'page' && (
-          <p className="m-0 mt-1.5 text-[11px] text-muted">
-            searching within this page ({loadedCount} loaded)
+          <p className="m-0 mt-1.5 text-[12.5px] text-subtle">
+            Searching within this page ({loadedCount} loaded)
           </p>
         )}
       </div>
@@ -98,11 +98,11 @@ export function RepoToolbar({
           options={FORK_FILTERS}
           value={forkFilter}
           onChange={onForkFilterChange}
-          label="filter by fork status"
+          label="Filter by fork status"
         />
         {forkFilter !== 'all' && filterScopedToPage && (
-          <p className="m-0 text-[11px] text-muted">
-            within this page ({loadedCount} loaded)
+          <p className="m-0 text-[12.5px] text-subtle">
+            Within this page ({loadedCount} loaded)
           </p>
         )}
       </div>

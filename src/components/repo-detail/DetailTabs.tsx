@@ -18,8 +18,7 @@ import {
   fetchIssues,
   fetchEvents,
   fetchCerts,
-  mapTreeEntriesToFiles,
-} from '../../lib/api';
+  mapTreeEntriesToFiles, didKeySegment } from '../../lib/api';
 import type { ApiIssue, ApiPull, ApiRepoEvent, ApiCert, BlobResult } from '../../lib/api';
 import { normalizeRepoPath, isMarkdownPath } from '../../lib/lang';
 import { buildRepoCodeSearch, type RepoCodeTarget } from '../../lib/repoNavigation';
@@ -58,16 +57,16 @@ const LAZY_FETCHERS: Record<LazyTabId, (o: string, n: string, s?: AbortSignal) =
 
 function EmptyTab({ label }: { label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-20 text-center border border-border">
-      <p className="m-0 text-[13px] text-muted">no {label} yet</p>
+    <div className="border-y border-border py-14">
+      <p className="m-0 text-[14px] text-muted">No {label} yet.</p>
     </div>
   );
 }
 
 function TabLoading() {
   return (
-    <div className="flex items-center justify-center py-16 border border-border" aria-busy="true">
-      <p className="m-0 text-[13px] text-muted animate-pulse">loading…</p>
+    <div className="border-y border-border py-14" aria-busy="true">
+      <p className="m-0 text-[14px] text-subtle animate-pulse">Loading…</p>
     </div>
   );
 }
@@ -76,15 +75,16 @@ function TabError({ message, onRetry }: { message: string; onRetry: () => void }
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-16 border border-border">
       <p className="m-0 text-[13px] text-danger">failed to load: {message}</p>
-      <Pill onClick={onRetry}>retry</Pill>
+      <Pill onClick={onRetry}>Retry</Pill>
     </div>
   );
 }
 
-const TRIGGER_CLS = 'px-3 sm:px-4 py-3 text-[13px] font-normal lowercase whitespace-nowrap';
+const TRIGGER_CLS = 'px-3 sm:px-4 py-3 text-[14px] capitalize whitespace-nowrap';
+const COUNT_CLS = 'ml-1.5 font-mono text-[11.5px] font-normal tabular-nums text-subtle';
 
 function errMsg(err: unknown): string {
-  return err instanceof Error ? err.message : 'request failed';
+  return err instanceof Error ? err.message : 'Request failed';
 }
 
 interface DetailTabsProps {
@@ -295,7 +295,7 @@ export function DetailTabs({ repo, value, onValueChange, onOpenFinder }: DetailT
         setTabData(d => ({ ...d, [tab]: idleTab } as LazyTabData));
         loadLazyTab(tab);
       };
-      return <TabError message={state.error ?? 'request failed'} onRetry={retry} />;
+      return <TabError message={state.error ?? 'Request failed'} onRetry={retry} />;
     }
     if (state.items.length === 0) return <EmptyTab label={emptyLabel} />;
     return render();
@@ -309,20 +309,20 @@ export function DetailTabs({ repo, value, onValueChange, onOpenFinder }: DetailT
       <Tabs.ListContainer className="mb-6">
         <Tabs.List aria-label="Repository tabs">
           <Tabs.Tab id="code" className={TRIGGER_CLS}>
-            code
-            <span className="ml-1.5 text-[11px] tabular-nums text-muted">{repo.files.length}</span>
+            Code
+            <span className={COUNT_CLS}>{repo.files.length}</span>
             <Tabs.Indicator />
           </Tabs.Tab>
           <Tabs.Tab id="commits" className={TRIGGER_CLS}>
-            commits
-            <span className="ml-1.5 text-[11px] tabular-nums text-muted">{repo.commits.length}</span>
+            Commits
+            <span className={COUNT_CLS}>{repo.commits.length}</span>
             <Tabs.Indicator />
           </Tabs.Tab>
           {(['pulls', 'issues', 'certs', 'events'] as const).map(id => (
             <Tabs.Tab key={id} id={id} className={TRIGGER_CLS}>
               {id}
               {tabData[id].status === 'ready' && (
-                <span className="ml-1.5 text-[11px] tabular-nums text-muted">
+                <span className={COUNT_CLS}>
                   {tabData[id].items.length}
                 </span>
               )}
@@ -368,8 +368,8 @@ export function DetailTabs({ repo, value, onValueChange, onOpenFinder }: DetailT
               </>
             )}
             {onOpenFinder && (
-              <Pill onClick={onOpenFinder} className="ml-auto" aria-label="find file (t)">
-                find file · t
+              <Pill onClick={onOpenFinder} className="ml-auto gap-2 rounded-[var(--radius-control)] px-2 py-0.5" aria-label="Find file (t)">
+                Find file <span className="font-mono text-[11px] text-subtle">t</span>
               </Pill>
             )}
           </div>
@@ -426,7 +426,7 @@ export function DetailTabs({ repo, value, onValueChange, onOpenFinder }: DetailT
         {renderLazyTab('issues', 'issues', () => <IssueList items={tabData.issues.items} />)}
       </Tabs.Panel>
       <Tabs.Panel id="certs" className="">
-        {renderLazyTab('certs', 'certificates', () => <CertList items={tabData.certs.items} />)}
+        {renderLazyTab('certs', 'certificates', () => <CertList items={tabData.certs.items} repo={`${didKeySegment(repo.owner)}/${repo.name}`} />)}
       </Tabs.Panel>
       <Tabs.Panel id="events" className="">
         {renderLazyTab('events', 'events', () => <EventList items={tabData.events.items} />)}

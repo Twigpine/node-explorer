@@ -36,12 +36,12 @@ export function AgentTextPanel({ slug }: AgentTextPanelProps) {
   return (
     <section
       aria-labelledby="agent-text-heading"
-      className="rounded-[var(--radius)] border border-border bg-surface-secondary p-4"
+      className="border-t border-border pt-4"
     >
-      <h2 id="agent-text-heading" className="m-0 text-[13px] font-semibold text-foreground">
+      <h2 id="agent-text-heading" className="m-0 text-[13px] font-[540] text-foreground">
         Read this as text
       </h2>
-      <p className="m-0 mt-1 text-[12px] text-muted">
+      <p className="m-0 mt-1 text-[12.5px] text-subtle">
         Every page here is served as plain markdown to any client that asks for it.
       </p>
 
@@ -51,7 +51,7 @@ export function AgentTextPanel({ slug }: AgentTextPanelProps) {
             <div className="flex items-baseline justify-between gap-2">
               <a
                 href={file.path}
-                className="min-w-0 truncate font-mono text-[12.5px] text-foreground hover:text-accent hover:underline"
+                className="min-w-0 truncate font-mono text-[12.5px] text-foreground hover:underline"
               >
                 {file.label}
               </a>
@@ -59,12 +59,12 @@ export function AgentTextPanel({ slug }: AgentTextPanelProps) {
                 type="button"
                 onClick={() => copy(file.label, file.path)}
                 aria-label={`Copy URL for ${file.label}`}
-                className="shrink-0 rounded-[var(--radius-control)] px-1.5 py-0.5 text-[11px] text-muted transition-colors hover:bg-surface hover:text-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-accent"
+                className="shrink-0 rounded-[var(--radius-control)] px-1.5 py-0.5 text-[12px] text-subtle transition-colors hover:text-foreground focus:outline-none focus-visible:outline-2 focus-visible:outline-accent"
               >
                 {copied === file.label ? 'Copied' : 'Copy'}
               </button>
             </div>
-            <span className="text-[11px] leading-snug text-muted">{file.note}</span>
+            <span className="inline-block text-[12px] leading-snug text-subtle first-letter:uppercase">{file.note}</span>
           </li>
         ))}
       </ul>

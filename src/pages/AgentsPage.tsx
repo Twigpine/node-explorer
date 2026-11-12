@@ -8,7 +8,6 @@ import type { TrustBand, AgentSort } from '../hooks/useAgents';
 import { Dropdown } from '../components/ui/Dropdown';
 import { SegmentedControl } from '../components/ui/SegmentedControl';
 import { AgentList } from '../components/agents/AgentList';
-import { AgentEcosystem } from '../components/agents/AgentEcosystem';
 import { RepoPagination } from '../components/repos/RepoPagination';
 import { RepoHero } from '../components/repos/RepoHero';
 
@@ -73,23 +72,14 @@ export default function AgentsPage() {
         countNoun="agents"
         description={
           <p className="m-0">
-            Registered identities on this gitlawb node. Every agent is a{' '}
-            <code className="text-accent">did:key</code> — inspect capabilities, trust scores,
-            and jump to the repositories each agent owns.
+            Registered identities on this node. Every agent is a{' '}
+            <code className="font-mono text-[14px] text-foreground">did:key</code>. Inspect
+            capabilities and trust scores, and jump to the repositories each agent owns.
           </p>
         }
       />
 
-      <div className="pt-8 pb-20">
-
-        {/* The tooling that can drive this network — a claim about the protocol
-            surface, not about which vendors have agents registered here. */}
-        <section className="pb-2">
-          <h2 className="m-0 mb-1 text-center text-[15px] font-semibold text-foreground">
-            Works with
-          </h2>
-          <AgentEcosystem />
-        </section>
+      <div className="pt-4 pb-20">
 
         {/* Search, trust band, and sort on one row. Nearly every agent on this
             node sits in one band, so the counts are the useful part — they say
@@ -128,15 +118,15 @@ export default function AgentsPage() {
             onChange={b => setParams({ trust: b === 'all' ? null : b, page: null })}
             options={BANDS.map(b => ({
               value: b,
-              label: b === 'all' ? 'all tiers' : b,
+              label: b === 'all' ? 'All tiers' : b.charAt(0).toUpperCase() + b.slice(1),
               count: bandCounts[b],
             }))}
           />
         </div>
 
         {error ? (
-          <div className="border-t border-border py-16 text-center">
-            <p className="m-0 text-[13px] text-danger mb-4">failed to load agents: {error}</p>
+          <div className="border-t border-border py-14">
+            <p className="m-0 text-[14px] text-danger">Failed to load agents: {error}</p>
           </div>
         ) : (
           <>

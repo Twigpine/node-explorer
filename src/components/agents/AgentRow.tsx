@@ -1,7 +1,6 @@
 import type { ApiAgent } from '../../lib/api';
 import { shortDid, didKeySegment, trustTier, timeAgo, formatDate } from '../../lib/api';
-import { cn } from '../../lib/utils';
-import { CopyButton } from '../ui/CopyButton';
+import { CopyValue } from '../ui/CopyValue';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
@@ -26,15 +25,14 @@ export function AgentRow({ agent }: AgentRowProps) {
   const unusualStatus = agent.status !== 'active';
 
   return (
-    <li className="list-none border-b border-separator last:border-b-0 px-1 py-3 hover:bg-surface-secondary transition-colors">
+    <li className="list-none border-b border-separator last:border-b-0 px-2 py-3 hover:bg-surface-secondary transition-colors">
       <div className="flex items-baseline gap-x-3 gap-y-1 flex-wrap">
-        <span className="font-mono text-[14px] font-semibold text-foreground">
+        <CopyValue value={agent.did} name="agent DID" className="text-[14px] font-medium text-foreground">
           {shortDid(agent.did)}
-        </span>
-        <CopyButton value={agent.did} label="DID" />
+        </CopyValue>
 
         {unusualStatus && (
-          <span className="rounded-full border border-attention/50 px-2 py-[1px] text-[12px] text-attention">
+          <span className="border border-attention/50 px-1.5 py-px text-[12px] text-attention">
             {agent.status}
           </span>
         )}
@@ -44,14 +42,14 @@ export function AgentRow({ agent }: AgentRowProps) {
               precision the tiers do not have. */}
           <span
             aria-hidden="true"
-            className="hidden sm:block h-1 w-14 bg-separator overflow-hidden"
+            className="hidden sm:block h-1.5 w-16 bg-surface-secondary overflow-hidden"
           >
             <span
-              className={cn('block h-full', pct >= 70 ? 'bg-success' : 'bg-foreground/50')}
+              className="block h-full bg-foreground"
               style={{ width: `${Math.max(pct, 2)}%` }}
             />
           </span>
-          <span className="tabular">
+          <span className="font-mono text-[12px] tabular">
             trust {pct}%
             <span className="px-1.5 text-subtle">·</span>
             {tier}
@@ -69,14 +67,14 @@ export function AgentRow({ agent }: AgentRowProps) {
         </div>
       )}
 
-      <div className="mt-2 flex items-center gap-x-5 gap-y-1 flex-wrap text-[12.5px] text-muted">
+      <div className="mt-2 flex items-center gap-x-5 gap-y-1 flex-wrap text-[12.5px] text-subtle">
         <span className="tabular">
           {agent.last_seen ? `Seen ${timeAgo(agent.last_seen)}` : 'Never seen'}
         </span>
         <span className="tabular">Registered {formatDate(agent.registered_at)}</span>
         <Link
           to={`/repos?owner=${encodeURIComponent(didKeySegment(agent.did))}`}
-          className="inline-flex items-center gap-1 text-accent hover:underline"
+          className="inline-flex items-center gap-1 text-foreground hover:underline"
         >
           Repositories <ArrowRight size={12} />
         </Link>

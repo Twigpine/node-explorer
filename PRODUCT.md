@@ -8,7 +8,7 @@ web
 
 ## Users
 
-**Primary: developers evaluating the gitlawb network.** Someone has heard about gitlawb — from a shared repo link, the docs, a mention of "signed git pushes without a blockchain" — and arrives wanting to judge whether it is real and worth their time. They are skeptical by default. They are looking for proof of life: real repositories with real names, pushes that happened minutes ago, signatures they could verify themselves. The job is *forming a judgment*, not completing a task. Credibility and comprehension at first contact outrank throughput.
+**Primary: developers evaluating the Twigpine network.** Someone has heard about Twigpine — from a shared repo link, the docs, a mention of "signed git pushes without a blockchain" — and arrives wanting to judge whether it is real and worth their time. They are skeptical by default. They are looking for proof of life: real repositories with real names, pushes that happened minutes ago, signatures they could verify themselves. The job is *forming a judgment*, not completing a task. Credibility and comprehension at first contact outrank throughput.
 
 Secondary audiences exist and are served, but do not steer design decisions:
 
@@ -17,21 +17,21 @@ Secondary audiences exist and are served, but do not steer design decisions:
 
 ## Product Purpose
 
-A live, read-only web explorer for a single gitlawb node. It renders the node's REST API — repositories, code, commits, pulls, issues, push events, signed certificates, registered agents, peers, and delegated tasks — as a browsable surface.
+A live, read-only web explorer for a single Twigpine node. It renders the node's REST API — repositories, code, commits, pulls, issues, push events, signed certificates, registered agents, peers, and delegated tasks — as a browsable surface.
 
 Its real function is evidentiary. Anyone can claim to run a decentralized git network; the explorer is the artifact that demonstrates one is actually running, populated, and signing. Success is a skeptical developer leaving convinced the network is real and understanding what makes it different.
 
 ## Positioning
 
-gitlawb's mechanism is verifiable provenance without accounts or a blockchain: identity is an Ed25519 DID keypair generated on the user's machine, every push is signed under RFC 9421 HTTP signatures, and every push produces a ref-update certificate anyone can verify independently. Repositories are cloned over a `gitlawb://` scheme via the `git-remote-gitlawb` helper. Public nodes gate registration behind iCaptcha, a proof-of-intelligence challenge, rather than proof-of-work or human-only CAPTCHAs — agents are first-class participants, not adversaries to be filtered out.
+Twigpine's mechanism is verifiable provenance without accounts or a blockchain: identity is an Ed25519 DID keypair generated on the user's machine, every push is signed under RFC 9421 HTTP signatures, and every push produces a ref-update certificate anyone can verify independently. Repositories are cloned over a `gitlawb://` scheme via the `git-remote-gitlawb` helper. Public nodes gate registration behind iCaptcha, a proof-of-intelligence challenge, rather than proof-of-work or human-only CAPTCHAs — agents are first-class participants, not adversaries to be filtered out.
 
-A conventional forge cannot truthfully copy this: its authority comes from an account system and a server that vouches for history. gitlawb's comes from signatures anyone can check without trusting the node that served them.
+A conventional forge cannot truthfully copy this: its authority comes from an account system and a server that vouches for history. Twigpine's comes from signatures anyone can check without trusting the node that served them.
 
 The explorer's job is to make that mechanism *visible* rather than merely stated. Certificates, pushers, DIDs, and cert IDs are not incidental metadata on this surface — they are the evidence.
 
 ## Operating Context
 
-- The explorer is a pure client of one node's REST API (`node.gitlawb.com`). It holds no database and no server state of its own.
+- The explorer is a pure client of one node's REST API (`node.twigpine.com`). It holds no database and no server state of its own.
 - Nodes serve no CORS headers, so every request goes through a same-origin proxy: Vite's dev proxy locally, Vercel rewrites in production. Peer nodes are reached through per-node path prefixes. This list is duplicated in three files and must be kept in sync.
 - Data arrives from a live public network. Repository names, descriptions, and owner DIDs are attacker-influenceable strings and must be treated as untrusted in both rendering and routing.
 - Much of the live corpus is machine-generated: at time of writing, roughly 5,900 repositories, many named `pixel-655812`, `astro-505073`, described as "automated repo" or "mirrored from peer", all on branch `main`, all public. The interface's real content is repetitive by nature. Designs validated against curated sample data will not survive contact with it.
@@ -57,17 +57,25 @@ The explorer's job is to make that mechanism *visible* rather than merely stated
 
 ## Brand Commitments
 
-- **Name:** gitlawb. The site is "gitlawb node explorer" at `explorer.gitlawb.com`.
-- **Mark:** the official gitlawb glyph, already extracted from the platform brand asset and shipped at [Logo.tsx](src/components/ui/Logo.tsx) and [favicon.svg](public/favicon.svg). Binding — carry it forward.
-- **Visual register: modern product showcase.** The explorer is a shop window for the network as much as a tool — it has to look impressive to a developer meeting gitlawb for the first time. Motion, depth, and visual ambition are wanted, delivered through the Magic UI and Aceternity component libraries the user chose. Data density and readability still bind on list-heavy surfaces (repos index, repo detail), but the overview is allowed to sell.
+- **Name:** Twigpine Explorer, "Explorer by Twigpine" in prose. The site is at `explorer.twigpine.com`. The lockup is the Pine mark, lowercase `twigpine`, then `/ explorer` dimmer.
+- **Mark:** the Pine mark (stem, three tiers, a bud), shipped at [Mark.tsx](src/components/brand/Mark.tsx) and [favicon.svg](public/favicon.svg) with the same geometry as twigpine.com. Binding.
+- **Visual system: Canopy, the Twigpine theme.** A white ledger with one ink. Values and rules are the ones twigpine.com ships; the tokens are in [index.css](src/index.css).
+  - **One ink, one accent.** Every colour is the ink at a few opacities over paper, plus the needle. The needle means one thing only: newest, live now. It marks the newest row of a ledger and the Live dot. It is never a link, a button, a hover, a success state or a chart bar.
+  - **Status in words.** States are told apart by the word and by ink weight. Only a failure takes a colour, because a failure has to be findable in a long column.
+  - **Type.** Geist for the interface and headings, sentence case, no caps labels and no letterspacing. Geist Mono only for what a machine emits or a person types: hashes, DIDs, refs, paths, commands.
+  - **Shape.** Radius 0, 2px on buttons and inputs, circles for dots. No shadows, blur, gradients or glass. Regions are ruled, not boxed.
+  - **Every image is data.** The page's picture is the live ledger. Instrument chrome (corner brackets, a tick ruler) frames the places where the page reads an instrument: the ledger and a certificate.
+  - **Motion.** One: the bud arriving on a new newest row. Numbers are stated, never counted up.
+  - **Theme.** Follows the OS until the reader picks one; both themes are first-class.
+- **Names that do not change.** The `gitlawb://` scheme, the `gl` and `git-remote-gitlawb` binaries, the `gitlawb/ref-updates/v1` topic, `did:gitlawb`, the `@gitlawb/gl` package and the `GITLAWB_*` settings are protocol and client identifiers. Renaming them breaks clients, so copy uses them as they are.
 - **Superseded (do not revive):**
-  - *"The Register"* — light safety-paper ground, engraved guilloche from hashes, wax-seal marks, Bodoni display. Rejected as unprofessional for this audience.
-  - *Plain forge convention* — a straight GitHub/Sourcegraph rendition. Correct but judged too plain: "we need to make modern which need to showcase". The conventional structure survives on dense list surfaces; the flat, unaccented treatment does not.
-- **Libraries are load-bearing.** Aceternity, Magic UI, and GSAP were chosen by the user and are to be used as real components, not reimplemented by hand.
+  - *"The Register"*: light safety-paper ground, engraved guilloche from hashes, wax-seal marks, Bodoni display.
+  - *Plain forge convention*: a straight GitHub/Sourcegraph rendition.
+  - *Modern product showcase* (August 2026): the black gitlawb identity in Geist Mono with Magic UI, Aceternity and GSAP effects (globe, orbit, beams, aurora text, confetti). Replaced by Canopy in November 2026; the libraries were removed.
 
 ## Evidence on Hand
 
-- A live, populated node at `node.gitlawb.com` — real repositories, real signed pushes, real agents and certificates. This is the product's strongest asset and the interface's actual content.
+- A live, populated node at `node.twigpine.com` — real repositories, real signed pushes, real agents and certificates. This is the product's strongest asset and the interface's actual content.
 - Written documentation in `public/docs/` (quickstart, agents, protocol, node), plus `llms.txt` and a packaged agent skill at `public/skill.md`. Factual and specific; usable as copy source.
 - Screenshots of the v0.3.8 interface in `reference/`, predating the current code.
 - **Absent — must not be fabricated:** testimonials, named users or customers, adoption or traffic numbers, benchmarks, funding, pricing, uptime or SLA claims, security audits, and any endorsement. The network is described in its own docs as alpha. No claim of scale or production-readiness beyond what the live API returns is available.

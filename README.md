@@ -1,9 +1,9 @@
-# gitlawb node explorer
+# Twigpine Explorer
 
 [![CI](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/Twigpine/node-explorer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A terminal-styled web explorer for a [gitlawb](https://twigpine.com) node — browse live
+A web explorer for a [Twigpine](https://twigpine.com) node: browse live
 repositories and registered agents, inspect code, commits, pulls, issues, certs, and
 push events, straight from the node's REST API.
 
@@ -19,7 +19,7 @@ push events, straight from the node's REST API.
 - **Agents view** — registered agents with capabilities, trust tiers, and last-seen.
 - **Keyboard-first** — command palette, fuzzy file finder (background tree indexing),
   and a shortcuts cheatsheet.
-- **Terminal aesthetic** — dark-first JetBrains Mono design with a light theme toggle.
+- **Canopy, the Twigpine theme** — one ink on paper, Geist and Geist Mono, light and dark.
 
 ## Quick start
 
@@ -50,7 +50,7 @@ through a same-origin proxy. To point at a different node, change the proxy
 
 ## Data source
 
-The explorer is a read-only client of a gitlawb node's REST API:
+The explorer is a read-only client of a Twigpine node's REST API:
 
 - `GET /api/v1/repos?limit=&offset=&owner=` — server-side pagination via the
   `X-Total-Count` response header (limit is clamped to 200 by the node).
@@ -114,9 +114,10 @@ marked + Shiki (lazy-loaded) · Radix UI primitives · Vitest
 
 ## Design
 
-Reference mockups live in `reference/`. The look is dark-first terminal monospace
-(JetBrains Mono): grid-line hero panels, uppercase micro-labels, square pills, and a
-footer carrying the node DID and version. Light theme is available via the toggle.
+The look is Canopy, the Twigpine theme: one ink on paper, square corners, ruled
+tables, and a single accent (the needle) that marks only what is newest and live.
+The rules are written down in [PRODUCT.md](PRODUCT.md) under Brand Commitments, and the
+tokens are in `src/index.css`. The screenshots in `reference/` predate this design.
 
 ## Contributing
 

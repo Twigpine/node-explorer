@@ -38,9 +38,9 @@ export function CopyButton({ value, label = 'Copy', srLabel, size = 'sm', classN
       size={size === 'md' ? 'md' : 'sm'}
       onPress={handleCopy}
       aria-label={srLabel ?? `copy ${label}`}
-      className={cn(copied && 'text-success', className)}
+      className={cn(copied && 'text-foreground', className)}
     >
-      {copied ? 'Copied' : label}
+      <span className="inline-block first-letter:uppercase">{copied ? 'Copied' : label}</span>
       {copied ? <Check size={11} /> : <Copy size={11} />}
     </Button>
   );

@@ -110,17 +110,32 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const items = useMemo<(PaletteItem & { section: string })[]>(() => {
     const list: (PaletteItem & { section: string })[] = [];
 
-    list.push({ id: 'nav-repos', section: 'actions', kind: 'action', label: 'go to repositories', run: () => navigate('/repos') });
-    list.push({ id: 'nav-agents', section: 'actions', kind: 'action', label: 'go to agents', run: () => navigate('/agents') });
+    // Every section, with the two-key jump that reaches it without the palette.
+    for (const [key, to, name] of [
+      ['o', '/', 'Overview'],
+      ['r', '/repos', 'Repositories'],
+      ['n', '/network', 'Network'],
+      ['p', '/peers', 'Peers'],
+      ['e', '/events', 'Events'],
+      ['t', '/tasks', 'Tasks'],
+      ['a', '/agents', 'Agents'],
+      ['d', '/docs', 'Docs'],
+    ] as const) {
+      list.push({
+        id: `nav-${to}`, section: 'Go to', kind: 'action', label: name, hint: `g ${key}`,
+        run: () => navigate(to),
+      });
+    }
 
     if (detailMatch) {
       list.push({
-        id: 'find-file', section: 'actions', kind: 'action', label: 'find file', hint: 't',
+        id: 'find-file', section: 'This repository', kind: 'action', label: 'Find file', hint: 't',
         run: () => setOpenModal('finder'),
       });
       for (const tab of TAB_IDS) {
         list.push({
-          id: `tab-${tab}`, section: 'actions', kind: 'action', label: `open: ${tab}`,
+          id: `tab-${tab}`, section: 'This repository', kind: 'action',
+          label: `Open ${tab}`,
           run: () => navigate(`${pathname}${tab === 'code' ? '' : `?tab=${tab}`}`),
         });
       }
@@ -134,7 +149,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     );
     for (const r of repoRows.slice(0, 12)) {
       list.push({
-        id: `repo-${r.id}`, kind: 'repo', section: SERVER_SEARCH_ENABLED ? 'repositories' : 'recent repos',
+        id: `repo-${r.id}`, kind: 'repo', section: SERVER_SEARCH_ENABLED ? 'Repositories' : 'Recent repositories',
         label: `${shortDid(r.owner_did)}/${r.name}`,
         hint: r.description ?? undefined,
         run: () => navigate(`/repos/${r.owner_did}/${r.name}`),
@@ -145,7 +160,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     if (agents && query) {
       for (const a of agents.filter(a => a.did.toLowerCase().includes(query.toLowerCase())).slice(0, 5)) {
         list.push({
-          id: `agent-${a.did}`, kind: 'agent', section: 'agents',
+          id: `agent-${a.did}`, kind: 'agent', section: 'Agents',
           label: shortDid(a.did), hint: a.capabilities.join(', '),
           run: () => navigate(`/repos?owner=${encodeURIComponent(a.did.split(':').pop() ?? '')}`),
         });
@@ -155,7 +170,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     for (const hit of searchDocs(docSections, query)) {
       list.push({
         id: `doc-${hit.docSlug}-${hit.id || 'top'}`,
-        section: 'documentation',
+        section: 'Documentation',
         kind: 'doc',
         // A document's own top-level heading repeats its title; printing both
         // reads as "Quickstart · Quickstart".
@@ -239,7 +254,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center bg-background/70 px-4 pt-[10vh] backdrop-blur-[2px]"
+      className="fixed inset-0 z-[100] flex items-start justify-center bg-background/85 px-4 pt-[10vh]"
       onClick={onClose}
       onKeyDown={handleKeyDown}
     >
@@ -249,8 +264,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
         aria-label="Command palette"
         className={cn(
           'w-full max-w-[620px] overflow-hidden bg-background',
-          'rounded-[var(--radius)] border border-border',
-          'shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)]',
+          'border border-foreground',
         )}
         onClick={e => e.stopPropagation()}
       >
@@ -292,7 +306,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                   <div
                     role="presentation"
                     className={cn(
-                      'px-2.5 pb-1 text-[11px] font-medium text-muted',
+                      'px-2.5 pb-1 text-[12px] text-subtle',
                       i === 0 ? 'pt-1.5' : 'pt-3',
                     )}
                   >
@@ -325,7 +339,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                     {item.label}
                   </span>
                   {item.hint && (
-                    <span className="ml-auto min-w-0 truncate text-right text-[11.5px] text-muted">
+                    <span className="ml-auto min-w-0 truncate text-right text-[12px] text-subtle">
                       {item.hint}
                     </span>
                   )}
@@ -340,8 +354,8 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           })}
 
           {filtered.length === 0 && (
-            <div className="px-4 py-10 text-center">
-              <p className="m-0 text-[13px] text-foreground">No matches for “{query}”</p>
+            <div className="px-4 py-10">
+              <p className="m-0 text-[14px] text-foreground">No matches for “{query}”</p>
               <p className="m-0 mt-1 text-[12px] text-muted">
                 Try a repository name, an agent DID, or a phrase from the docs.
               </p>
@@ -357,9 +371,9 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           </span>
           <span className="flex shrink-0 items-center gap-1.5">
             <Kbd>↑↓</Kbd>
-            <span>navigate</span>
+            <span>Navigate</span>
             <Kbd>↵</Kbd>
-            <span>open</span>
+            <span>Open</span>
           </span>
         </div>
       </div>

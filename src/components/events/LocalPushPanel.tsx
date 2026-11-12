@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Circle } from 'lucide-react';
 import {
   fetchRepos, fetchEvents, didKeySegment, shortDid, shortRefName, shortSha, timeAgo,
 } from '../../lib/api';
 import type { ApiRepo, ApiRepoEvent } from '../../lib/api';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
-import { MicroLabel } from '../ui/MicroLabel';
 
 interface RepoPushes {
   repo: ApiRepo;
@@ -76,32 +74,29 @@ export function LocalPushPanel({ query }: { query: string }) {
 
   return (
     <div className="border-t border-border mb-4">
-      <div className="flex items-baseline gap-3 px-4 h-9 border-b border-border">
-        <MicroLabel>local pushes</MicroLabel>
-        <span className="text-[11px] text-muted">
-          signed certificates from matching repos — these never appear in the gossip feed below
+      <div className="flex flex-wrap items-baseline gap-x-3 px-2 py-2.5 border-b border-separator">
+        <h2 className="m-0 text-[13.5px] font-[540] text-foreground">Local pushes</h2>
+        <span className="text-[12.5px] text-subtle">
+          Signed certificates from matching repositories. These never appear in the gossip feed below.
         </span>
       </div>
       <ul className="m-0 p-0 list-none">
         {results.map(({ repo, pushes }) => {
           const ownerKey = didKeySegment(repo.owner_did);
           return (
-            <li key={repo.id} className="px-4 sm:px-6 py-3 border-b border-separator last:border-b-0">
+            <li key={repo.id} className="px-2 py-3 border-b border-separator last:border-b-0">
               <Link
                 to={`/repos/${encodeURIComponent(ownerKey)}/${encodeURIComponent(repo.name)}`}
-                className="text-[13px] font-bold text-foreground hover:text-accent transition-colors"
+                className="font-mono text-[13px] font-medium text-foreground hover:underline"
               >
                 {shortDid(repo.owner_did)}/{repo.name}
               </Link>
               {pushes.length === 0 ? (
-                <p className="m-0 mt-1 text-[12px] text-muted">no pushes recorded yet</p>
+                <p className="m-0 mt-1 text-[12.5px] text-subtle">No pushes recorded yet</p>
               ) : (
                 <ul className="m-0 mt-1 p-0 list-none flex flex-col gap-1">
                   {pushes.map(push => (
-                    <li key={push.id} className="flex flex-wrap items-baseline gap-x-3 text-[12px] text-muted">
-                      <span aria-hidden="true" className="text-success self-center">
-                        <Circle size={6} fill="currentColor" />
-                      </span>
+                    <li key={push.id} className="flex flex-wrap items-baseline gap-x-3 font-mono text-[12px] text-muted">
                       <span>{shortRefName(push.ref_name)}</span>
                       <span className="tabular-nums">
                         {push.old_sha.startsWith('0000000')

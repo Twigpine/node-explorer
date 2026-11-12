@@ -1,17 +1,3 @@
-import { DotPattern } from '../ui/dot-pattern';
-import { AuroraText } from '../ui/aurora-text';
-import { NumberTicker } from '../ui/number-ticker';
-
-/* Aurora ramp, read from theme tokens rather than fixed hexes: this text is
-   painted through background-clip with a transparent colour, so a hardcoded
-   white ramp is invisible on the light theme's white ground. */
-const AURORA = [
-  'var(--ramp-1)',
-  'var(--ramp-2)',
-  'var(--ramp-3)',
-  'var(--ramp-4)',
-];
-
 interface RepoHeroProps {
   totalCount: number;
   page: number;
@@ -19,7 +5,7 @@ interface RepoHeroProps {
   windowStart: number;
   windowEnd: number;
   title?: string;
-  /** The word AuroraText picks out of the title. Defaults to the last word. */
+  /** Unused; kept so existing call sites compile. */
   accent?: string;
   description?: React.ReactNode;
   countNoun?: string;
@@ -28,62 +14,44 @@ interface RepoHeroProps {
 }
 
 /**
- * Listing page header.
- *
- * Carries the overview's language — patterned ground, an accented headline,
- * live counts — at a smaller scale, because a listing page's job is to get out
- * of the way of the list underneath it.
+ * Listing page header: a title, one sentence of scope, and the counts that
+ * describe the list underneath. Plain, because a listing page's job is to get
+ * out of the way of the list.
  */
 export function RepoHero({
   totalCount,
   title = 'Repositories',
-  accent,
   description,
   countNoun = 'repositories',
   cells,
 }: RepoHeroProps) {
-  const words = title.trim().split(' ');
-  const lead = accent ? title.replace(accent, '').trim() : words.slice(0, -1).join(' ');
-  const tail = accent ?? words[words.length - 1];
-
   return (
-    <header className="relative overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 pt-12 pb-8">
-      <DotPattern
-        width={24}
-        height={24}
-        cr={1}
-        className="absolute inset-0 h-full w-full fill-border/50
-          [mask-image:radial-gradient(420px_circle_at_20%_0%,white,transparent)]"
-      />
+    <header className="pt-10 pb-6 sm:pt-12">
+      <h1 className="m-0 text-[30px] sm:text-[36px] font-[540] leading-[1.1] tracking-[-0.03em] text-foreground">
+        {title}
+      </h1>
 
-      <div className="relative">
-        <h1 className="m-0 text-[32px] sm:text-[40px] font-semibold tracking-tight leading-[1.1] text-foreground">
-          {lead && <>{lead} </>}
-          <AuroraText speed={1.4} colors={AURORA}>{tail}</AuroraText>
-        </h1>
+      {description ? (
+        <div className="mt-3 max-w-[72ch] text-[15px] leading-[1.6] text-muted">{description}</div>
+      ) : (
+        <p className="m-0 mt-3 max-w-[72ch] text-[15px] leading-[1.6] text-muted">
+          <span className="font-medium tabular text-foreground">{totalCount.toLocaleString()}</span>{' '}
+          {countNoun} on this node, each clonable over{' '}
+          <code className="font-mono text-[14px] text-foreground">gitlawb://</code> and certified
+          per ref.
+        </p>
+      )}
 
-        {description ? (
-          <div className="text-[15px] text-muted mt-3 max-w-[68ch]">{description}</div>
-        ) : (
-          <p className="m-0 text-[15px] text-muted mt-3 max-w-[68ch]">
-            <NumberTicker value={totalCount} className="font-semibold text-foreground" />{' '}
-            {countNoun} on this node, each clonable over{' '}
-            <code className="font-mono text-[14px] text-accent">gitlawb://</code> and certified per
-            ref.
-          </p>
-        )}
-
-        {cells && cells.length > 0 && (
-          <dl className="flex flex-wrap items-baseline gap-x-7 gap-y-2 mt-5 m-0">
-            {cells.map(c => (
-              <div key={c.label} className="flex items-baseline gap-1.5">
-                <dd className="m-0 text-[15px] font-semibold tabular text-foreground">{c.value}</dd>
-                <dt className="text-[13px] text-muted">{c.label}</dt>
-              </div>
-            ))}
-          </dl>
-        )}
-      </div>
+      {cells && cells.length > 0 && (
+        <dl className="m-0 mt-5 flex flex-wrap items-baseline gap-x-8 gap-y-2">
+          {cells.map(c => (
+            <div key={c.label} className="flex items-baseline gap-1.5">
+              <dd className="m-0 text-[15px] font-[540] tabular text-foreground">{c.value}</dd>
+              <dt className="text-[13px] text-subtle">{c.label}</dt>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }

@@ -75,7 +75,7 @@ function ImagePreview({ src, alt }: { src: string; alt: string }) {
     return (
       <CenteredPanel>
         <p className="m-0 text-[13px] text-muted">Image preview unavailable.</p>
-        <RawLink href={src} aria-label="open raw image">open raw ↗</RawLink>
+        <RawLink href={src} aria-label="Open raw image">Open raw ↗</RawLink>
       </CenteredPanel>
     );
   }
@@ -273,7 +273,7 @@ export function FileViewer({
             className="shrink-0 rounded-[var(--radius-control)] px-1 text-[12px] font-medium text-muted
               hover:text-foreground transition-colors"
           >
-            ← folder
+            ← Folder
           </Link>
           <span aria-hidden="true" className="shrink-0 text-[12px] text-muted">/</span>
           <h2
@@ -291,8 +291,8 @@ export function FileViewer({
           {headSha && (
             <span
               translate="no"
-              className="shrink-0 text-[11px] text-muted max-md:hidden"
-              title="content served at HEAD"
+              className="shrink-0 font-mono text-[12px] text-subtle max-md:hidden"
+              title="Content served at HEAD"
             >
               @ {shortSha(headSha)}
             </span>
@@ -302,7 +302,7 @@ export function FileViewer({
         <div className="flex min-h-10 items-center gap-3 border-t border-separator px-4 py-1.5 sm:px-5">
           <span className="shrink-0 text-[11px] tabular-nums text-muted" aria-live="polite">
             {loading
-              ? 'loading…'
+              ? 'Loading…'
               : blob
                 ? lineCount !== null
                   ? `${lineCount.toLocaleString()} lines · ${blob.sizeLabel}`
@@ -312,18 +312,18 @@ export function FileViewer({
 
           <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5">
             {showsCode && (
-              <Pill onClick={toggleWrap} active={wrap} aria-pressed={wrap}>wrap</Pill>
+              <Pill onClick={toggleWrap} active={wrap} aria-pressed={wrap}>Wrap</Pill>
             )}
             {markdown && blob?.kind === 'text' && (
-              <span role="group" aria-label="view mode" className="flex shrink-0 gap-1">
-                <Pill onClick={() => onSetView('preview')} active={view === 'preview'}>preview</Pill>
-                <Pill onClick={() => onSetView('code')} active={view === 'code'}>code</Pill>
+              <span role="group" aria-label="View mode" className="flex shrink-0 gap-1">
+                <Pill onClick={() => onSetView('preview')} active={view === 'preview'}>Preview</Pill>
+                <Pill onClick={() => onSetView('code')} active={view === 'code'}>Code</Pill>
               </span>
             )}
             {blob?.kind === 'text' && blob.content !== undefined && (
               <CopyButton
                 value={blob.content}
-                label="contents"
+                label="Copy contents"
                 srLabel="copy file contents"
                 className="shrink-0"
               />
@@ -333,14 +333,14 @@ export function FileViewer({
               size="sm"
               onPress={copyLink}
               className="shrink-0"
-              aria-label="copy link to file"
+              aria-label="Copy link to file"
             >
-              <span aria-live="polite">{linkCopied ? 'link copied' : 'copy link'}</span>
+              <span aria-live="polite">{linkCopied ? 'Link copied' : 'Copy link'}</span>
             </Button>
-            {blob && <RawLink href={blob.url} aria-label="open raw file">raw ↗</RawLink>}
+            {blob && <RawLink href={blob.url} aria-label="Open raw file">Raw ↗</RawLink>}
             {onOpenFinder && (
-              <Pill onClick={onOpenFinder} className="shrink-0" aria-label="find file (t)">
-                find file · t
+              <Pill onClick={onOpenFinder} className="shrink-0" aria-label="Find file (t)">
+                Find file <span className="ml-1.5 font-mono text-[11px] text-subtle">t</span>
               </Pill>
             )}
           </div>
@@ -353,17 +353,17 @@ export function FileViewer({
       {error && !loading && (
         <CenteredPanel>
           <div>
-            <p className="m-0 text-[13px] font-medium text-danger">couldn’t load {basename}</p>
+            <p className="m-0 text-[13px] font-medium text-danger">Could not load {basename}</p>
             <p className="m-0 mt-1 text-[12px] text-muted">{error}</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onPress={onRetry}>retry</Button>
+            <Button variant="outline" size="sm" onPress={onRetry}>Retry</Button>
             <Link
               to={backTo}
               className="inline-flex h-7 items-center rounded-[var(--radius-control)] px-2.5
                 text-[12px] text-muted hover:text-foreground transition-colors"
             >
-              back to folder
+              Back to folder
             </Link>
           </div>
         </CenteredPanel>
@@ -380,15 +380,15 @@ export function FileViewer({
           <ImagePreview key={blob.url} src={blob.url} alt={basename} />
         ) : blob.kind === 'binary' ? (
           <CenteredPanel>
-            <p className="m-0 text-[13px] text-muted">binary file · {blob.sizeLabel}</p>
-            <RawLink href={blob.url} aria-label="download raw file">download raw ↗</RawLink>
+            <p className="m-0 text-[13px] text-muted">Binary file · {blob.sizeLabel}</p>
+            <RawLink href={blob.url} aria-label="Download raw file">Download raw ↗</RawLink>
           </CenteredPanel>
         ) : (
           <CenteredPanel>
-            <p className="m-0 text-[13px] text-muted">file too large to display · {blob.sizeLabel}</p>
+            <p className="m-0 text-[13px] text-muted">File too large to display · {blob.sizeLabel}</p>
             <div className="flex gap-2">
-              <RawLink href={blob.url} aria-label="view raw file">view raw ↗</RawLink>
-              <Pill onClick={onForce}>load anyway</Pill>
+              <RawLink href={blob.url} aria-label="View raw file">View raw ↗</RawLink>
+              <Pill onClick={onForce}>Load anyway</Pill>
             </div>
           </CenteredPanel>
         )

@@ -63,7 +63,7 @@ describe('cleanSocialText', () => {
 
   it('returns an explicit fallback description for empty text', () => {
     expect(buildRepoDescription({ ...REPO, description: ' \n\t ' })).toBe(
-      'Explore z6MkqRzA/digital-garden on gitlawb explorer.',
+      'Explore z6MkqRzA/digital-garden on Twigpine Explorer.',
     );
   });
 
@@ -95,7 +95,7 @@ describe('escapeHtml', () => {
     });
 
     expect(escapeHtml(model.title)).toBe(
-      'z6MkqRzA/&lt;script&gt;alert(&quot;owned&quot;)&lt;/script&gt; · gitlawb explorer',
+      'z6MkqRzA/&lt;script&gt;alert(&quot;owned&quot;)&lt;/script&gt; · Twigpine Explorer',
     );
     expect(escapeHtml(model.description)).toBe(
       'Ship &amp; &#39;share&#39; &lt;b&gt;bold&lt;/b&gt;',
@@ -125,7 +125,7 @@ describe('buildRepoSocialModel', () => {
     expect(buildRepoSocialModel(REPO)).toMatchObject({
       name: 'digital-garden',
       repositoryLabel: 'z6MkqRzA/digital-garden',
-      title: 'z6MkqRzA/digital-garden · gitlawb explorer',
+      title: 'z6MkqRzA/digital-garden · Twigpine Explorer',
       description: REPO.description,
       branch: 'main',
       visibility: 'public',

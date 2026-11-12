@@ -4,11 +4,11 @@ import { fetchRepository, fetchRepositoryEvents } from './_lib/repository.js';
 import type { ApiRepositoryEvent } from './_lib/repository.js';
 import { markdownResponse, prefersHtml, NEGOTIATION_VARY } from './_lib/negotiation.js';
 
-const GENERIC_TITLE = 'gitlawb explorer';
+const GENERIC_TITLE = 'Twigpine Explorer';
 const GENERIC_DESCRIPTION =
   'Browse live repositories on the gitlawb network — clone over gitlawb://, inspect ownership, and verify push certificates.';
 const GENERIC_IMAGE_ALT =
-  'gitlawb explorer — a terminal-style browser for live repositories on the gitlawb network';
+  'Twigpine Explorer, a browser for live repositories on the Twigpine network';
 
 const SOCIAL_META_PATTERN =
   /<!-- gitlawb:social-meta:start -->[\s\S]*?<!-- gitlawb:social-meta:end -->/;
@@ -96,7 +96,7 @@ function renderMetadata(metadata: Metadata): string {
     <meta name="description" content="${description}" />
     <link rel="canonical" href="${canonicalUrl}" />${robots}
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="gitlawb explorer" />
+    <meta property="og:site_name" content="Twigpine Explorer" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:url" content="${canonicalUrl}" />
